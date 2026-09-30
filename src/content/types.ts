@@ -111,6 +111,19 @@ export interface DurationBalanceProps {
   yearsMax: number;
 }
 
+export interface StripsExplodeProps {
+  /** The coupon bond to strip. */
+  bond: Code;
+  /** Six-pack rows that mature on the bond's maturity date, shown when its last piece is picked. */
+  sameDay: Code[];
+}
+
+export interface TipsMeterProps {
+  tips: ('TIPS56' | 'TIPS50')[];
+  /** Inflation slider range, percent per year. */
+  inflationMax: number;
+}
+
 export interface DemoPropsMap {
   CashflowTimeline: CashflowTimelineProps;
   SeesawCurve: SeesawCurveProps;
@@ -121,6 +134,8 @@ export interface DemoPropsMap {
   YieldCurve: YieldCurveProps;
   SideBySide: SideBySideProps;
   DurationBalance: DurationBalanceProps;
+  StripsExplode: StripsExplodeProps;
+  TipsMeter: TipsMeterProps;
 }
 
 export type DemoName = keyof DemoPropsMap;
@@ -136,7 +151,9 @@ export type RevealAction =
   | { kind: 'roundTrip'; bond: Code; faceK: number }
   | { kind: 'curveRead'; years: number }
   | { kind: 'sameYield'; bond: Code; y: number }
-  | { kind: 'durationShift'; bond: Code; dyBp: number; faceK: number };
+  | { kind: 'durationShift'; bond: Code; dyBp: number; faceK: number }
+  | { kind: 'stripPiece'; date: string; compare: Code }
+  | { kind: 'breakeven'; tips: 'TIPS56' | 'TIPS50' };
 
 /** Which reveal each demo understands (checked by content.test.ts). */
 export const REVEALS_FOR: { [K in DemoName]: RevealAction['kind'][] } = {
@@ -149,6 +166,8 @@ export const REVEALS_FOR: { [K in DemoName]: RevealAction['kind'][] } = {
   YieldCurve: ['curveRead'],
   SideBySide: ['sameYield'],
   DurationBalance: ['durationShift'],
+  StripsExplode: ['stripPiece'],
+  TipsMeter: ['breakeven'],
 };
 
 export interface SideBet {

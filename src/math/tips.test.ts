@@ -13,3 +13,17 @@ describe('tipsInvoice', () => {
     expect(tipsInvoice(50.25, 1, 10000).amount).toBeCloseTo(5025, 10);
   });
 });
+
+import { breakevenInflation, growSemiannual, tipsNominalReturn } from './tips.ts';
+
+describe('breakeven inflation', () => {
+  it('is where the TIPS return meets the nominal yield', () => {
+    const be = breakevenInflation(0.0574, 0.03315);
+    expect(tipsNominalReturn(0.03315, be)).toBeCloseTo(0.0574, 12);
+    expect(be).toBeCloseTo(0.0574 - 0.03315, 3);
+    expect(be).toBeLessThan(0.0574 - 0.03315);
+  });
+  it('grows money semiannually', () => {
+    expect(growSemiannual(100, 0.05, 1)).toBeCloseTo(105.0625, 10);
+  });
+});

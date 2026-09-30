@@ -13,9 +13,7 @@ export const IBKR_TREASURY_COMMISSION = { rate: 0.00002, rateAbove1M: 0.000001, 
 export const IBKR_MIN_COMMISSION_USD = IBKR_TREASURY_COMMISSION.min;
 export const IBKR_COMMISSION_RATE_OF_FACE = IBKR_TREASURY_COMMISSION.rate;
 
-// TODO(待核实 §5.4): TIPS index ratios for 2026-09-30 are estimates; look them up on TreasuryDirect.
-export const TIPS56_INDEX_RATIO = 1.01;
-export const TIPS50_INDEX_RATIO = 1.25;
+// §5.4 TIPS index ratios: resolved from TreasuryDirect on 2026-09-30, see tipsIndex.ts (1.03033 and 1.29882).
 
 // TODO(待核实 §5.5): Moody's cut the US from Aaa to Aa1 in May 2025 (believed to be 2025-05-16).
 export const MOODYS_DOWNGRADE = { from: 'Aaa', to: 'Aa1', month: '2025-05' } as const;

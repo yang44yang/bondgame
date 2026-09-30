@@ -8,6 +8,8 @@ import { PullToPar } from './PullToPar.tsx';
 import { QuoteSpread } from './QuoteSpread.tsx';
 import { SeesawCurve } from './SeesawCurve.tsx';
 import { SideBySide } from './SideBySide.tsx';
+import { StripsExplode } from './StripsExplode.tsx';
+import { TipsMeter } from './TipsMeter.tsx';
 import { YieldCurve } from './YieldCurve.tsx';
 import type { DemoRuntimeProps } from './types.ts';
 
@@ -22,6 +24,8 @@ const REGISTRY: { [K in DemoName]: ComponentType<DemoRuntimeProps<DemoPropsMap[K
   YieldCurve,
   SideBySide,
   DurationBalance,
+  StripsExplode,
+  TipsMeter,
 };
 
 export function DemoHost({ spec, ...rest }: { spec: DemoSpec } & Omit<DemoRuntimeProps<unknown>, 'props'>) {

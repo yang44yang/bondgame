@@ -52,6 +52,16 @@
       "note": "ask 价格被截图截断，用 IBKR 的 ask 收益率反算"
     },
     {
+      "code": "NSP35N",
+      "bid": 62.276,
+      "ask": 62.3758,
+      "points": 0.0998,
+      "yieldBp": 2,
+      "source": "computed",
+      "screenshot": "note scanner.png",
+      "note": "ask 价格被截图截断，用 IBKR 的 ask 收益率反算"
+    },
+    {
       "code": "SP29",
       "bid": 89.08,
       "ask": 89.2032,

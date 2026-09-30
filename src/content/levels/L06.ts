@@ -1,22 +1,14 @@
 /** Level 6 · Bills, Notes, Bonds and the Yield Curve (CLAUDE.md §4.6 outline, written out). */
-import { monotoneCubic } from '../../math/curve.ts';
-import { yearsLeft } from '../../math/bond.ts';
-import { NOMINAL_30Y_YIELD } from '../../data/assumptions.ts';
-import { instrument, screenMidYield, SETTLE_DATE } from '../../data/snapshot.ts';
+import { screenMidYield } from '../../data/snapshot.ts';
 import type { Code } from '../../data/types.ts';
 import type { LevelContent } from '../types.ts';
+import { CURVE_30Y, CURVE_KNOTS as KNOTS, nominalCurve as CURVE, yearsTo as yrs } from '../curve.ts';
 import { levelMeta } from './meta.ts';
 
-const KNOTS: Code[] = ['BILL27', 'BOND30', 'NOTE36A', 'SP43', 'SP48'];
 const EXTRAS: Code[] = ['BOND36', 'NOTE36F', 'NOTE36M', 'NSP36M', 'SI46'];
 const REAL_2Y: Code[] = ['SP28A', 'SP28', 'SI28', 'SP29'];
-const yrs = (c: Code) => yearsLeft(instrument(c).maturity, SETTLE_DATE);
 const mid = (c: Code) => screenMidYield(c)!;
 const p2 = (x: number) => x.toFixed(2) + '%';
-
-const xs = [...KNOTS.map(yrs), 30];
-const ys = [...KNOTS.map(mid), NOMINAL_30Y_YIELD * 100];
-const CURVE = monotoneCubic(xs, ys);
 const AT2 = CURVE(2);
 const LINEAR2 = mid('BILL27') + ((2 - yrs('BILL27')) / (yrs('BOND30') - yrs('BILL27'))) * (mid('BOND30') - mid('BILL27'));
 const REAL_LO = Math.min(...REAL_2Y.map(mid));
@@ -55,7 +47,7 @@ export const L06: LevelContent = {
   lesson,
   demo: {
     component: 'YieldCurve',
-    props: { knots: KNOTS, extras: EXTRAS, revealExtras: REAL_2Y, inferred: { years: 30, yield: NOMINAL_30Y_YIELD * 100 }, paths: ['P1', 'P3', 'P4'] },
+    props: { knots: KNOTS, extras: EXTRAS, revealExtras: REAL_2Y, inferred: CURVE_30Y, paths: ['P1', 'P3', 'P4'] },
   },
   demoGuide,
   quiz: [

@@ -76,3 +76,16 @@ describe('agrees with the CLAUDE.md 2.1 table', () => {
     expect(model('TSI36').modDuration).toBeCloseTo(9.22, 2);
   });
 });
+
+import { TIPS_INDEX } from './tipsIndex.ts';
+
+describe('TIPS index ratios (TreasuryDirect, settlement 2026-09-30)', () => {
+  it('each ratio is the settlement reference CPI over the dated-date reference CPI', () => {
+    for (const r of Object.values(TIPS_INDEX)) {
+      expect(Math.abs(r.refCpiSettle / r.refCpiDated - r.indexRatio)).toBeLessThan(0.000006);
+    }
+  });
+  it('matches the CUSIPs of the TIPS in the snapshot', () => {
+    expect(TIPS_INDEX.TIPS56.cusip).toBe(SNAPSHOT.instruments.find((i) => i.code === 'TIPS56')!.cusip);
+  });
+});

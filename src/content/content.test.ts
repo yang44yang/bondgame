@@ -8,8 +8,8 @@ import { cleanPrice } from '../math/bond.ts';
 const built = Object.values(LEVELS).filter((l) => l !== undefined);
 
 describe('level content', () => {
-  it('builds levels 1–9 so far', () => {
-    expect(Object.keys(LEVELS).map(Number)).toEqual([1, 2, 3, 4, 5, 6, 7, 8, 9]);
+  it('builds levels 1–11 so far', () => {
+    expect(Object.keys(LEVELS).map(Number)).toEqual([1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11]);
   });
 
   it.each(built.map((l) => [l.id, l] as const))('level %i: the side-bet reveal is one its demo understands', (_id, level) => {
@@ -57,6 +57,11 @@ describe('level content', () => {
     expect(LEVELS[7]!.bet!.answer).toBeCloseTo(92.72, 2);
     // §4.8: yields −0.75% on $50,000 face of BOND36 (duration estimate +$2,691; convexity adds the rest).
     expect(LEVELS[8]!.bet!.answer).toBeCloseTo(2783.43, 1);
+    // §4.10: SP36 has no screenshot; priced at the STRIPS yield of its neighbours (CLAUDE.md: ≈61.5).
+    expect(LEVELS[10]!.bet!.answer).toBeCloseTo(61.52, 2);
+    // §4.11: breakeven between TIPS50's real yield and the nominal curve at 2050 (CLAUDE.md: ≈2.4%).
+    expect(LEVELS[11]!.bet!.answer).toBeGreaterThan(2.3);
+    expect(LEVELS[11]!.bet!.answer).toBeLessThan(2.5);
     for (const l of built) {
       const b = l.bet!;
       expect(b.answer).toBeGreaterThanOrEqual(b.slider.min);

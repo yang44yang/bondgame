@@ -723,6 +723,65 @@
       ]
     },
     {
+      "code": "NSP35N",
+      "role": "第 10 关：夹住 SP36 的相邻本金条",
+      "treasuryType": "Note STRIPS Principal",
+      "pricing": "zero",
+      "cusip": null,
+      "coupon": 0,
+      "maturity": "2035-11-15",
+      "headline": {
+        "quote": 0,
+        "field": "closing"
+      },
+      "names": [
+        {
+          "use": "scanner",
+          "text": "US-T Govt Note STRIPS Principal 0.0 Nov15'35",
+          "source": "ibkr",
+          "screenshot": "note scanner.png"
+        }
+      ],
+      "records": [
+        {
+          "source": "ibkr",
+          "type": "quote",
+          "screenshot": "note scanner.png",
+          "screen": "web · Bond Scanner · Treasury Type: Note",
+          "closing": 62.36,
+          "bid": 62.276,
+          "ask": null,
+          "bidYield": 5.26,
+          "askYield": 5.24,
+          "bidSizeK": 25000,
+          "askSizeK": null,
+          "truncated": {
+            "ask": "62.3…",
+            "askSizeK": "x $25,0…"
+          }
+        },
+        {
+          "source": "computed",
+          "type": "model",
+          "method": "bond.ts：半年复利、实际/实际、T+1",
+          "input": {
+            "price": 62.36,
+            "field": "closing"
+          },
+          "ytm": 5.2428,
+          "cleanPrice": 62.36,
+          "accrued": 0,
+          "dirtyPrice": 62.36,
+          "modDuration": 8.8919,
+          "macaulay": 9.125,
+          "askFromYield": {
+            "askYield": 5.24,
+            "ask": 62.3758
+          }
+        }
+      ]
+    },
+    {
       "code": "NSP36M",
       "role": "校准 SP36 价格",
       "treasuryType": "Note STRIPS Principal",

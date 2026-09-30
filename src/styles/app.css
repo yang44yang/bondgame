@@ -225,6 +225,9 @@ input[type=range]:disabled { opacity: .5; cursor: default; }
 .bar-dim { opacity: .28; }
 .bar-sel { fill: var(--amber); }
 .bar-hit { fill: transparent; }
+.zone-nominal { fill: var(--green-soft); opacity: .55; }
+.zone-tips { fill: var(--indigo-soft); opacity: .7; }
+.strip-outline { fill: var(--card); stroke: var(--muted); stroke-width: 1.2; stroke-dasharray: 3 2; }
 .ref-line { stroke: var(--amber); stroke-width: 1.2; stroke-dasharray: 5 4; }
 .break-mark { stroke: var(--card); stroke-width: 3; }
 .callout-box { fill: var(--card); stroke: var(--amber); stroke-width: 1.4; }
