@@ -128,3 +128,9 @@ export function headerQuote(code: Code): HeaderQuote {
     screenshot: q.screenshot,
   };
 }
+
+/** Mid of the bid and ask yields IBKR shows (percent), from the first quote that has both; null if none. */
+export function screenMidYield(code: Code): number | null {
+  const q = quotes(code).find((r) => typeof r.bidYield === 'number' && typeof r.askYield === 'number');
+  return q ? (q.bidYield! + q.askYield!) / 2 : null;
+}

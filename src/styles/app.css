@@ -243,6 +243,7 @@ input[type=range]:disabled { opacity: .5; cursor: default; }
 .dtable td:first-child { font-family: var(--font); white-space: normal; }
 .dtable tr.is-hl td { background: var(--amber-soft); }
 .dtable td.nowrap { white-space: nowrap; font-size: 13px; }
+.dtable td.wrap { white-space: normal; }
 .dtable .sub { display: block; font-size: 12px; color: var(--muted); }
 .sw { display: inline-block; width: 10px; height: 10px; border-radius: 2px; margin-right: 6px; vertical-align: 0; }
 .sw.fill-1 { background: var(--s1); } .sw.fill-2 { background: var(--s2); } .sw.fill-3 { background: var(--s3); } .sw.fill-4 { background: var(--s4); }
@@ -281,6 +282,8 @@ input[type=range]:disabled { opacity: .5; cursor: default; }
 .ibq-btns { display: flex; gap: 8px; margin-top: 6px; }
 .ibq-btns .ib-buy, .ibq-btns .ib-sell { min-height: 44px; min-width: 88px; cursor: pointer; }
 .ibq-fill { min-height: 24px; font-size: 14px; font-weight: 500; }
+
+.ib-select { font: inherit; min-height: 44px; padding: 6px 10px; border-radius: 6px; border: 1px solid var(--line); background: var(--card); color: var(--ib-link); }
 
 /* ---------- quiz ---------- */
 .quiz { display: grid; gap: 12px; }

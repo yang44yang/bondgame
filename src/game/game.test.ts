@@ -120,3 +120,26 @@ describe('quiz draw', () => {
     expect(overlap.length).toBe(1); // bank of 5: two new, one reused
   });
 });
+
+import { matchesTreasuryType } from './scannerFilter.ts';
+import { pathShiftBp, ratePath } from '../data/ratePaths.ts';
+
+describe('Bond Scanner Treasury Type filter (as observed on the screenshots)', () => {
+  it('Note also lists Note STRIPS; Bond also lists Bond STRIPS', () => {
+    expect(matchesTreasuryType('Note', 'Note STRIPS Principal')).toBe(true);
+    expect(matchesTreasuryType('Bond', 'Bond STRIPS Interest')).toBe(true);
+    expect(matchesTreasuryType('Bond', 'Bond STRIPS Principal')).toBe(true);
+    expect(matchesTreasuryType('Bond', 'Note')).toBe(false);
+    expect(matchesTreasuryType('Bill', 'Note')).toBe(false);
+    expect(matchesTreasuryType('All', 'Bond TIPS')).toBe(true);
+  });
+});
+
+describe('sandbox rate paths (CLAUDE.md §4.14)', () => {
+  it('moves the short end below 1 year and the long end above 20 years', () => {
+    expect(pathShiftBp(ratePath('P3'), 0.5)).toBe(-50);
+    expect(pathShiftBp(ratePath('P3'), 25)).toBe(100);
+    expect(pathShiftBp(ratePath('P3'), 10.5)).toBeCloseTo(25, 10);
+    expect(pathShiftBp(ratePath('P1'), 7)).toBe(150);
+  });
+});

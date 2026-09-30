@@ -1178,6 +1178,124 @@
       ]
     },
     {
+      "code": "SP28A",
+      "role": "第 6 关揭晓：2 年左右的真实点",
+      "treasuryType": "Bond STRIPS Principal",
+      "pricing": "zero",
+      "cusip": null,
+      "coupon": 0,
+      "maturity": "2028-08-15",
+      "headline": {
+        "quote": 0,
+        "field": "closing"
+      },
+      "names": [
+        {
+          "use": "scanner",
+          "text": "US-T Govt Bond STRIPS Principal 0.0 Aug15'28",
+          "source": "ibkr",
+          "screenshot": "ScreenShot_2026-09-29_095125_954.png"
+        }
+      ],
+      "records": [
+        {
+          "source": "ibkr",
+          "type": "quote",
+          "screenshot": "ScreenShot_2026-09-29_095125_954.png",
+          "screen": "web · Bond Scanner · 2028/01/01 To 2036/01/01 · Treasury Type: Bond",
+          "closing": 91.42,
+          "bid": 91.234,
+          "ask": null,
+          "bidYield": 4.954,
+          "askYield": 4.854,
+          "bidSizeK": 25000,
+          "askSizeK": null,
+          "truncated": {
+            "ask": "91.4…",
+            "askSizeK": "x $25,0…"
+          }
+        },
+        {
+          "source": "computed",
+          "type": "model",
+          "method": "bond.ts：半年复利、实际/实际、T+1",
+          "input": {
+            "price": 91.42,
+            "field": "closing"
+          },
+          "ytm": 4.842,
+          "cleanPrice": 91.42,
+          "accrued": 0,
+          "dirtyPrice": 91.42,
+          "modDuration": 1.8307,
+          "macaulay": 1.875,
+          "askFromYield": {
+            "askYield": 4.854,
+            "ask": 91.3999
+          }
+        }
+      ]
+    },
+    {
+      "code": "SP29",
+      "role": "第 6 关揭晓：2 年左右的真实点",
+      "treasuryType": "Bond STRIPS Principal",
+      "pricing": "zero",
+      "cusip": null,
+      "coupon": 0,
+      "maturity": "2029-02-15",
+      "headline": {
+        "quote": 0,
+        "field": "closing"
+      },
+      "names": [
+        {
+          "use": "scanner",
+          "text": "US-T Govt Bond STRIPS Principal 0.0 Feb15'29",
+          "source": "ibkr",
+          "screenshot": "ScreenShot_2026-09-29_095125_954.png"
+        }
+      ],
+      "records": [
+        {
+          "source": "ibkr",
+          "type": "quote",
+          "screenshot": "ScreenShot_2026-09-29_095125_954.png",
+          "screen": "web · Bond Scanner · 2028/01/01 To 2036/01/01 · Treasury Type: Bond",
+          "closing": 89.21,
+          "bid": 89.08,
+          "ask": null,
+          "bidYield": 4.929,
+          "askYield": 4.869,
+          "bidSizeK": 25000,
+          "askSizeK": null,
+          "truncated": {
+            "ask": "89.2…",
+            "askSizeK": "x $25,0…"
+          }
+        },
+        {
+          "source": "computed",
+          "type": "model",
+          "method": "bond.ts：半年复利、实际/实际、T+1",
+          "input": {
+            "price": 89.21,
+            "field": "closing"
+          },
+          "ytm": 4.8657,
+          "cleanPrice": 89.21,
+          "accrued": 0,
+          "dirtyPrice": 89.21,
+          "modDuration": 2.3186,
+          "macaulay": 2.375,
+          "askFromYield": {
+            "askYield": 4.869,
+            "ask": 89.2032
+          }
+        }
+      ]
+    },
+    {
       "code": "TIPS56",
       "role": "TIPS 主例（2026-02 新发 30 年）",
       "treasuryType": "Bond TIPS",

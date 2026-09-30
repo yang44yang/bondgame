@@ -4,7 +4,7 @@
 
 纯静态站：Vite + React 18 + TypeScript，图表全部手写 SVG，没有后端。进度只存在浏览器的 localStorage 里。设计文档见 [CLAUDE.md](CLAUDE.md)。
 
-目前可以玩第 1–5 关和第 9 关，其余关卡显示大纲。
+目前可以玩第 1–9 关，其余关卡显示大纲。
 
 ## 运行
 

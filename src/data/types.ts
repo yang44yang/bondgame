@@ -3,7 +3,7 @@
 export type Code =
   | 'BILL27' | 'BOND30' | 'BOND36' | 'NOTE36F' | 'NOTE36A' | 'NOTE36M'
   | 'SP36' | 'SI36' | 'NSP36' | 'TSI36' | 'NSP36M' | 'SP48' | 'SP43' | 'SI46'
-  | 'SI28' | 'SP28' | 'TIPS56' | 'TIPS50';
+  | 'SI28' | 'SP28' | 'SP28A' | 'SP29' | 'TIPS56' | 'TIPS50';
 
 /**
  * ibkr      = shown on an IBKR screen (the screenshot is named)

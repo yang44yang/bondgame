@@ -17,18 +17,19 @@ interface Props {
 
 function formatValue(x: number, unit: Bet['slider']['unit']): string {
   if (unit === 'usd') return usd(x);
+  if (unit === 'usdChange') return (x > 0 ? '+' : '') + usd(x);
   if (unit === 'pct') return signed(x, 1, '%');
   if (unit === 'share') return x.toFixed(2) + '%';
   return x.toFixed(2);
 }
 
 function formatErr(x: number, unit: Bet['slider']['unit']): string {
-  const n = unit === 'usd' ? usd(x) : x.toFixed(unit === 'pct' ? 1 : 2);
+  const n = unit === 'usd' || unit === 'usdChange' ? usd(x) : x.toFixed(unit === 'pct' ? 1 : 2);
   return n + ui.bet.errSuffix[unit];
 }
 
 function ErrValue({ x, unit }: { x: number; unit: Bet['slider']['unit'] }) {
-  const n = unit === 'usd' ? usd(x) : x.toFixed(unit === 'pct' ? 1 : 2);
+  const n = unit === 'usd' || unit === 'usdChange' ? usd(x) : x.toFixed(unit === 'pct' ? 1 : 2);
   return <>{n}<small className="en">{ui.bet.errSuffix[unit]}</small></>;
 }
 

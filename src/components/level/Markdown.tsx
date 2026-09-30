@@ -3,7 +3,7 @@
  *   blank line = new block · "- " list · "> " key point · "### " heading
  *   **bold** · `code` · [[中文|English]] bilingual term
  */
-import type { ReactNode } from 'react';
+import { Fragment, type ReactNode } from 'react';
 
 const INLINE = /(\*\*[^*]+\*\*|`[^`]+`|\[\[[^\]|]+\|[^\]]+\]\])/g;
 
@@ -35,17 +35,27 @@ export function Inline({ text }: { text: string }) {
   return <>{renderInline(text)}</>;
 }
 
-function Block({ source }: { source: string }) {
+/** One blank-line-separated block; list lines and text lines inside it become separate elements. */
+function Block({ source }: { source: string }): ReactNode[] {
   const lines = source.split('\n').map((l) => l.trim());
-  if (lines.every((l) => l.startsWith('- '))) {
-    return <ul>{lines.map((l, i) => <li key={i}>{renderInline(l.slice(2))}</li>)}</ul>;
+  if (lines[0].startsWith('> ')) return [<p key="k" className="key">{renderInline(lines.map((l) => l.replace(/^>\s?/, '')).join(' '))}</p>];
+  if (lines[0].startsWith('### ')) return [<h3 key="h">{renderInline(lines.join(' ').slice(4))}</h3>];
+  const out: ReactNode[] = [];
+  let i = 0;
+  while (i < lines.length) {
+    const isItem = lines[i].startsWith('- ');
+    const run: string[] = [];
+    while (i < lines.length && lines[i].startsWith('- ') === isItem) run.push(lines[i++]);
+    out.push(
+      isItem
+        ? <ul key={out.length}>{run.map((l, j) => <li key={j}>{renderInline(l.slice(2))}</li>)}</ul>
+        : <p key={out.length}>{renderInline(run.join(' '))}</p>,
+    );
   }
-  if (lines[0].startsWith('> ')) return <p className="key">{renderInline(lines.map((l) => l.replace(/^>\s?/, '')).join(' '))}</p>;
-  if (lines[0].startsWith('### ')) return <h3>{renderInline(lines.join(' ').slice(4))}</h3>;
-  return <p>{renderInline(lines.join(' '))}</p>;
+  return out;
 }
 
 export function Markdown({ source }: { source: string }) {
   const blocks = source.trim().split(/\n\s*\n/);
-  return <div className="md">{blocks.map((b, i) => <Block key={i} source={b} />)}</div>;
+  return <div className="md">{blocks.flatMap((b, i) => Block({ source: b }).map((el, j) => <Fragment key={`${i}-${j}`}>{el}</Fragment>))}</div>;
 }

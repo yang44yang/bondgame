@@ -84,6 +84,33 @@ export interface QuoteSpreadProps {
   defaultFaceK: number;
 }
 
+export interface YieldCurveProps {
+  /** Points the curve line is drawn through, short to long. */
+  knots: Code[];
+  /** Also drawn as dots, but not used for the line. */
+  extras: Code[];
+  /** Hidden until the side bet is revealed. */
+  revealExtras: Code[];
+  /** An inferred long-end point with no screenshot behind it (drawn hollow and dashed). */
+  inferred: { years: number; yield: number };
+  /** Sandbox paths previewed by the three buttons. */
+  paths: ('P1' | 'P2' | 'P3' | 'P4')[];
+}
+
+export interface SideBySideProps {
+  bonds: Code[];
+  /** Slider range for the common yield (decimals). */
+  yieldMin: number;
+  yieldMax: number;
+}
+
+export interface DurationBalanceProps {
+  /** Preset bonds; the first is shown first. */
+  presets: Code[];
+  couponMax: number;
+  yearsMax: number;
+}
+
 export interface DemoPropsMap {
   CashflowTimeline: CashflowTimelineProps;
   SeesawCurve: SeesawCurveProps;
@@ -91,6 +118,9 @@ export interface DemoPropsMap {
   PullToPar: PullToParProps;
   AccruedCost: AccruedCostProps;
   QuoteSpread: QuoteSpreadProps;
+  YieldCurve: YieldCurveProps;
+  SideBySide: SideBySideProps;
+  DurationBalance: DurationBalanceProps;
 }
 
 export type DemoName = keyof DemoPropsMap;
@@ -103,7 +133,10 @@ export type RevealAction =
   | { kind: 'setShift'; bp: number; highlight: Code }
   | { kind: 'setDate'; bond: Code; date: string }
   | { kind: 'costTicket'; bond: Code; faceK: number }
-  | { kind: 'roundTrip'; bond: Code; faceK: number };
+  | { kind: 'roundTrip'; bond: Code; faceK: number }
+  | { kind: 'curveRead'; years: number }
+  | { kind: 'sameYield'; bond: Code; y: number }
+  | { kind: 'durationShift'; bond: Code; dyBp: number; faceK: number };
 
 /** Which reveal each demo understands (checked by content.test.ts). */
 export const REVEALS_FOR: { [K in DemoName]: RevealAction['kind'][] } = {
@@ -113,13 +146,16 @@ export const REVEALS_FOR: { [K in DemoName]: RevealAction['kind'][] } = {
   PullToPar: ['setDate'],
   AccruedCost: ['costTicket'],
   QuoteSpread: ['roundTrip'],
+  YieldCurve: ['curveRead'],
+  SideBySide: ['sameYield'],
+  DurationBalance: ['durationShift'],
 };
 
 export interface SideBet {
   /** Markdown. */
   prompt: string;
-  /** usd = dollars · price = per 100 face · pct = signed % change · share = a plain percentage */
-  slider: { min: number; max: number; step: number; initial: number; unit: 'usd' | 'price' | 'pct' | 'share' };
+  /** usd = dollars · usdChange = signed dollars · price = per 100 face · pct = signed % change · share = a plain percentage */
+  slider: { min: number; max: number; step: number; initial: number; unit: 'usd' | 'usdChange' | 'price' | 'pct' | 'share' };
   /** Computed with the bond engine when the content module loads. */
   answer: number;
   /** Payout by absolute error, tightest first. */

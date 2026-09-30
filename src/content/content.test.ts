@@ -8,8 +8,8 @@ import { cleanPrice } from '../math/bond.ts';
 const built = Object.values(LEVELS).filter((l) => l !== undefined);
 
 describe('level content', () => {
-  it('builds levels 1–5 and 9 so far', () => {
-    expect(Object.keys(LEVELS).map(Number)).toEqual([1, 2, 3, 4, 5, 9]);
+  it('builds levels 1–9 so far', () => {
+    expect(Object.keys(LEVELS).map(Number)).toEqual([1, 2, 3, 4, 5, 6, 7, 8, 9]);
   });
 
   it.each(built.map((l) => [l.id, l] as const))('level %i: the side-bet reveal is one its demo understands', (_id, level) => {
@@ -51,6 +51,12 @@ describe('level content', () => {
     expect(LEVELS[4]!.bet!.answer).toBeCloseTo((5 / (50 * (95.48047 + 0.5625) + 5)) * 100, 6);
     // §4.5: (95.54688 − 95.41406) × 1,000.
     expect(LEVELS[5]!.bet!.answer).toBeCloseTo(132.82, 6);
+    // §4.6: read at 2 years off the curve drawn through the real points (CLAUDE.md estimated ≈4.7%).
+    expect(LEVELS[6]!.bet!.answer).toBeCloseTo(4.747, 2);
+    // §4.7: NOTE36F priced at BOND36's yield (CLAUDE.md: 92.72).
+    expect(LEVELS[7]!.bet!.answer).toBeCloseTo(92.72, 2);
+    // §4.8: yields −0.75% on $50,000 face of BOND36 (duration estimate +$2,691; convexity adds the rest).
+    expect(LEVELS[8]!.bet!.answer).toBeCloseTo(2783.43, 1);
     for (const l of built) {
       const b = l.bet!;
       expect(b.answer).toBeGreaterThanOrEqual(b.slider.min);

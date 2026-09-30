@@ -52,6 +52,16 @@
       "note": "ask 价格被截图截断，用 IBKR 的 ask 收益率反算"
     },
     {
+      "code": "SP29",
+      "bid": 89.08,
+      "ask": 89.2032,
+      "points": 0.1232,
+      "yieldBp": 6,
+      "source": "computed",
+      "screenshot": "ScreenShot_2026-09-29_095125_954.png",
+      "note": "ask 价格被截图截断，用 IBKR 的 ask 收益率反算"
+    },
+    {
       "code": "SP48",
       "bid": 29.035,
       "ask": 29.159,
@@ -68,6 +78,16 @@
       "yieldBp": 1.8,
       "source": "ibkr",
       "screenshot": "app/app-BOND36-详情-上半屏.png"
+    },
+    {
+      "code": "SP28A",
+      "bid": 91.234,
+      "ask": 91.3999,
+      "points": 0.1659,
+      "yieldBp": 10,
+      "source": "computed",
+      "screenshot": "ScreenShot_2026-09-29_095125_954.png",
+      "note": "ask 价格被截图截断，用 IBKR 的 ask 收益率反算"
     },
     {
       "code": "SP28",

@@ -53,7 +53,7 @@ export const ui = {
     needQuiz: '先把三道题答全对，才能通关。Clear the quiz first.',
     goQuiz: '去答题 Go to Quiz',
     locked: '先押再看：押完这张图才会揭晓。Place your bet to unlock the chart.',
-    errSuffix: { usd: '', price: ' 点 pts', pct: ' 个百分点 pp', share: ' 个百分点 pp' },
+    errSuffix: { usd: '', usdChange: '', price: ' 点 pts', pct: ' 个百分点 pp', share: ' 个百分点 pp' },
     sliderLabel: '拖动押注 Drag to bet',
   },
 
