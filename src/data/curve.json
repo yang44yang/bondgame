@@ -1,0 +1,128 @@
+{
+  "snapshot": "2026-09-29",
+  "unit": "percent",
+  "nominal": [
+    {
+      "code": "BILL27",
+      "years": 0.92,
+      "yield": 4.523,
+      "source": "computed",
+      "basis": "IBKR bid / ask 收益率的中点",
+      "screenshot": "ScreenShot_2026-09-29_094456_610.png"
+    },
+    {
+      "code": "SP28",
+      "years": 2.13,
+      "yield": 4.917,
+      "source": "computed",
+      "basis": "IBKR bid / ask 收益率的中点",
+      "screenshot": "ScreenShot_2026-09-29_095125_954.png"
+    },
+    {
+      "code": "SI28",
+      "years": 2.13,
+      "yield": 4.9535,
+      "source": "computed",
+      "basis": "IBKR bid / ask 收益率的中点",
+      "screenshot": "ScreenShot_2026-09-29_095125_954.png"
+    },
+    {
+      "code": "BOND30",
+      "years": 3.62,
+      "yield": 5.032,
+      "source": "computed",
+      "basis": "IBKR bid / ask 收益率的中点",
+      "screenshot": "ScreenShot_2026-09-29_095125_954.png"
+    },
+    {
+      "code": "NOTE36F",
+      "years": 9.38,
+      "yield": 5.2375,
+      "source": "computed",
+      "basis": "IBKR bid / ask 收益率的中点",
+      "screenshot": "note scanner.png"
+    },
+    {
+      "code": "BOND36",
+      "years": 9.38,
+      "yield": 5.112,
+      "source": "computed",
+      "basis": "IBKR bid / ask 收益率的中点",
+      "screenshot": "app/app-BOND36-详情-上半屏.png"
+    },
+    {
+      "code": "NSP36M",
+      "years": 9.62,
+      "yield": 5.2535,
+      "source": "computed",
+      "basis": "IBKR bid / ask 收益率的中点",
+      "screenshot": "note scanner.png"
+    },
+    {
+      "code": "NOTE36M",
+      "years": 9.62,
+      "yield": 5.2405,
+      "source": "computed",
+      "basis": "IBKR bid / ask 收益率的中点",
+      "screenshot": "note scanner.png"
+    },
+    {
+      "code": "NOTE36A",
+      "years": 9.88,
+      "yield": 5.2405,
+      "source": "computed",
+      "basis": "IBKR bid / ask 收益率的中点",
+      "screenshot": "ScreenShot_2026-09-29_094643_710.png"
+    },
+    {
+      "code": "SP43",
+      "years": 17.13,
+      "yield": 5.6775,
+      "source": "computed",
+      "basis": "IBKR bid / ask 收益率的中点",
+      "screenshot": "order.png"
+    },
+    {
+      "code": "SI46",
+      "years": 19.62,
+      "yield": 5.829,
+      "source": "computed",
+      "basis": "IBKR bid / ask 收益率的中点",
+      "screenshot": "ScreenShot_2026-09-29_094557_961.png"
+    },
+    {
+      "code": "SP48",
+      "years": 21.88,
+      "yield": 5.724,
+      "source": "computed",
+      "basis": "IBKR bid / ask 收益率的中点",
+      "screenshot": "ScreenShot_2026-09-29_094820_891.png"
+    },
+    {
+      "code": null,
+      "years": 30,
+      "yield": 5.800000000000001,
+      "source": "inferred",
+      "basis": "assumptions.ts NOMINAL_30Y_YIELD（待核实 §5.7）"
+    }
+  ],
+  "real": [
+    {
+      "code": "TIPS50",
+      "years": 23.38,
+      "yield": 3.315,
+      "source": "computed",
+      "basis": "IBKR bid / ask 收益率的中点",
+      "screenshot": "ScreenShot_2026-09-29_095316_819.png"
+    },
+    {
+      "code": "TIPS56",
+      "years": 29.38,
+      "yield": 3.2925,
+      "source": "computed",
+      "basis": "IBKR bid / ask 收益率的中点",
+      "screenshot": "ScreenShot_2026-09-29_095341_660.png"
+    }
+  ],
+  "note": "BOND36 比同到期 Note 低约 13bp（CLAUDE.md 五.2），沙盒定价用曲线，不用 95.48。"
+}

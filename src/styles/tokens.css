@@ -1,0 +1,88 @@
+/* Palette: socialcontract.capital "paper green" (CLAUDE.md §3). Series 1–4 = green, indigo, amber, plum. */
+:root {
+  --bg: #FBFBF8;
+  --card: #FFFFFF;
+  --fg: #1E2823;
+  --muted: #66716B;
+  --line: #E2E6DF;
+  --line2: #EEF1EB;
+  --green: #2E9E5B;
+  --green-soft: #E6F4EB;
+  --indigo: #3B6BA5;
+  --indigo-soft: #E8EEF6;
+  --amber: #B0731A;
+  --amber-soft: #F6EEDF;
+  --plum: #8E5AA6;
+  --down: #C4453C;
+  --down-soft: #F8E7E5;
+  --lock: #C9CEC9;
+  --lockbg: #F2F4F0;
+  --on-accent: #FFFFFF;
+
+  /* IBKR web look-alike (buttons and links as on the Client Portal screenshots). */
+  --ib-link: #1F5FBF;
+  --ib-buy: #1F5FBF;
+  --ib-sell: #D51F2A;
+
+  --s1: var(--green);
+  --s2: var(--indigo);
+  --s3: var(--amber);
+  --s4: var(--plum);
+
+  --font: -apple-system, BlinkMacSystemFont, "PingFang SC", "Hiragino Sans GB", "Noto Sans SC", "Microsoft YaHei", system-ui, sans-serif;
+  --mono: "SF Mono", ui-monospace, Menlo, Consolas, "Roboto Mono", monospace;
+
+  --topbar-h: 56px;
+  --radius: 12px;
+  color-scheme: light;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #141816;
+    --card: #1B201D;
+    --fg: #E6EAE6;
+    --muted: #98A29B;
+    --line: #2B322D;
+    --line2: #232A26;
+    --green: #3DAE68;
+    --green-soft: #1D2E24;
+    --indigo: #5B8AD0;
+    --indigo-soft: #1C2533;
+    --amber: #B87B20;
+    --amber-soft: #2C2417;
+    --plum: #A77BC8;
+    --down: #E06A61;
+    --down-soft: #33201E;
+    --lock: #4A524D;
+    --lockbg: #1F2522;
+    --ib-link: #7AA2E3;
+    --ib-buy: #2F6FD0;
+    --ib-sell: #D8343E;
+    color-scheme: dark;
+  }
+}
+
+:root[data-theme="dark"] {
+  --bg: #141816;
+  --card: #1B201D;
+  --fg: #E6EAE6;
+  --muted: #98A29B;
+  --line: #2B322D;
+  --line2: #232A26;
+  --green: #3DAE68;
+  --green-soft: #1D2E24;
+  --indigo: #5B8AD0;
+  --indigo-soft: #1C2533;
+  --amber: #B87B20;
+  --amber-soft: #2C2417;
+  --plum: #A77BC8;
+  --down: #E06A61;
+  --down-soft: #33201E;
+  --lock: #4A524D;
+  --lockbg: #1F2522;
+  --ib-link: #7AA2E3;
+  --ib-buy: #2F6FD0;
+  --ib-sell: #D8343E;
+  color-scheme: dark;
+}

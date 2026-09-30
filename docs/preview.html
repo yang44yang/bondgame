@@ -1,0 +1,568 @@
+<title>Bondgame</title>
+<style>
+/* Layout: iPad-landscape first. Level pages split into a 3:2 grid (demo canvas left, controls + text right); everything stacks under 900px. */
+:root{
+  --bg:#FBFBF8; --card:#FFFFFF; --fg:#1E2823; --muted:#66716B; --line:#E2E6DF; --line2:#EEF1EB;
+  --green:#2E9E5B; --green-soft:#E6F4EB; --indigo:#3B6BA5; --amber:#B0731A; --plum:#8E5AA6;
+  --down:#C4453C; --lock:#C9CEC9; --lockbg:#F2F4F0;
+  --s1:var(--green); --s2:var(--indigo); --s3:var(--amber); --s4:var(--plum);
+  --font:-apple-system,"PingFang SC","Hiragino Sans GB","Noto Sans SC","Microsoft YaHei",system-ui,sans-serif;
+  --mono:"SF Mono",Menlo,Consolas,"Roboto Mono",monospace;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#141816; --card:#1B201D; --fg:#E6EAE6; --muted:#98A29B; --line:#2B322D; --line2:#232A26;
+    --green:#3DAE68; --green-soft:#1D2E24; --indigo:#5B8AD0; --amber:#B87B20; --plum:#A77BC8;
+    --down:#E06A61; --lock:#4A524D; --lockbg:#1F2522; color-scheme:dark;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#141816; --card:#1B201D; --fg:#E6EAE6; --muted:#98A29B; --line:#2B322D; --line2:#232A26;
+  --green:#3DAE68; --green-soft:#1D2E24; --indigo:#5B8AD0; --amber:#B87B20; --plum:#A77BC8;
+  --down:#E06A61; --lock:#4A524D; --lockbg:#1F2522; color-scheme:dark;
+}
+*{box-sizing:border-box}
+html,body{margin:0;background:var(--bg);color:var(--fg);font-family:var(--font);font-size:16px;line-height:1.6}
+body{padding-block:0 48px}
+h1,h2,h3{text-wrap:balance;margin:0;font-weight:600;line-height:1.25}
+h1{font-size:clamp(24px,3.2vw,34px)}
+h2{font-size:clamp(20px,2.4vw,26px)}
+h3{font-size:17px}
+p{margin:0}
+button{font:inherit;color:inherit}
+.en{color:var(--muted);font-weight:400}
+.num{font-family:var(--mono);font-variant-numeric:tabular-nums}
+.muted{color:var(--muted)}
+.small{font-size:13px}
+.up{color:var(--green)} .dn{color:var(--down)}
+
+/* top bar */
+.top{position:sticky;top:env(safe-area-inset-top,0px);z-index:5;background:var(--bg);border-bottom:1px solid var(--line);
+  display:flex;align-items:center;gap:18px;flex-wrap:wrap;padding:10px 20px}
+.brand{font-weight:600;font-size:17px;display:flex;align-items:baseline;gap:8px}
+.brand .en{font-size:14px}
+.brand .tag{font-size:11px;letter-spacing:.06em;text-transform:uppercase;color:var(--green);border:1px solid var(--green);border-radius:999px;padding:1px 8px;font-style:normal}
+.tabs{display:flex;gap:4px;flex-wrap:wrap}
+.tabs button{background:none;border:1px solid transparent;border-radius:8px;padding:6px 12px;cursor:pointer;color:var(--muted)}
+.tabs button.on{color:var(--fg);border-color:var(--line);background:var(--card)}
+.tabs button:focus-visible,button:focus-visible,input:focus-visible{outline:2px solid var(--indigo);outline-offset:2px}
+.wallet{margin-left:auto;font-size:13px;color:var(--muted)}
+.wallet b{color:var(--fg);font-family:var(--mono);font-size:15px;margin-left:6px}
+
+main{max-width:1180px;margin:0 auto;padding-inline:20px}
+section.view{padding-top:28px;display:grid;gap:28px}
+
+/* home */
+.hero{display:grid;gap:10px;max-width:760px}
+.hero p{color:var(--muted)}
+.sim{display:grid;gap:6px;margin-top:6px;max-width:520px}
+.sim label{font-size:14px;color:var(--muted)}
+.sim label b{color:var(--fg);font-family:var(--mono)}
+input[type=range]{width:100%;accent-color:var(--green);height:32px}
+
+.ibkr{background:var(--card);border:1px solid var(--line);border-radius:12px;overflow:hidden}
+.ibkr .bar{display:flex;gap:16px;align-items:center;flex-wrap:wrap;padding:12px 16px;border-bottom:1px solid var(--line);font-size:13px;color:var(--muted);background:var(--line2)}
+.ibkr .bar b{color:var(--fg);font-weight:600}
+.ibkr .bar .c{display:inline-flex;gap:6px}
+.ibkr .head{display:flex;justify-content:space-between;padding:10px 16px;font-weight:600;border-bottom:1px solid var(--line)}
+.tbl{width:100%;border-collapse:collapse}
+.tbl th{font-size:11px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);font-weight:500;text-align:left;padding:8px 12px;border-bottom:1px solid var(--line)}
+.tbl td{padding:12px 12px;border-bottom:1px solid var(--line2);vertical-align:top}
+.tbl tr:last-child td{border-bottom:0}
+.tbl .name{font-weight:600}
+.tbl .sub{display:block;font-size:12px;color:var(--muted);font-weight:400}
+.tbl .num{white-space:nowrap}
+.c .v{display:inline-block;transition:filter .35s,opacity .35s}
+.c:not(.lit) .v{filter:blur(5px);opacity:.4;user-select:none;pointer-events:none}
+.c.lit .v{filter:none;opacity:1}
+.c.lit.just .v{animation:glow 1.2s ease-out}
+@keyframes glow{0%{background:var(--green-soft)}100%{background:transparent}}
+.ghost{color:var(--muted)}
+.ghost .hint{display:block;font-size:11px;color:var(--muted)}
+.wrap{overflow-x:auto}
+.exam{display:flex;justify-content:space-between;align-items:center;gap:12px;padding:12px 16px;border-top:1px solid var(--line);flex-wrap:wrap}
+.legend{font-size:12px;color:var(--muted)}
+.legend i{display:inline-block;width:28px;height:12px;vertical-align:-2px;margin-right:6px;background:var(--fg);opacity:.35;filter:blur(3px);border-radius:2px}
+
+.map{display:grid;gap:14px}
+.season{display:grid;gap:10px}
+.season h3 .en{font-size:14px}
+.cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:10px}
+.card{border:1px solid var(--line);border-radius:10px;padding:12px 14px;background:var(--card);display:grid;gap:4px;min-width:0}
+.card .n{font-size:11px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);display:flex;justify-content:space-between}
+.card .t{font-weight:600;line-height:1.35}
+.card .t .en{display:block;font-size:12px}
+.card.done{border-color:var(--green)}
+.card.done .n::after{content:"已点亮 Lit";color:var(--green)}
+.card.cur{border-color:var(--indigo);box-shadow:inset 0 0 0 1px var(--indigo)}
+.card.cur .n::after{content:"当前 Current";color:var(--indigo)}
+.card.lock{opacity:.6}
+.card.lock .n::after{content:"锁定 Locked"}
+.card button{margin-top:6px;justify-self:start;background:var(--green);color:#fff;border:0;border-radius:8px;padding:6px 12px;cursor:pointer;font-size:14px}
+:root[data-theme="dark"] .card button,.card button{color:#fff}
+
+/* level pages */
+.lvl-head{display:grid;gap:8px}
+.eyebrow{font-size:12px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}
+.timeline{display:flex;gap:6px;list-style:none;padding:0;margin:6px 0 0;flex-wrap:wrap}
+.timeline li{font-size:12px;color:var(--muted);border:1px solid var(--line);border-radius:999px;padding:2px 10px}
+.timeline li b{color:var(--fg);font-weight:500}
+.lesson{max-width:720px;display:grid;gap:12px}
+.lesson .key{border-left:3px solid var(--green);padding:6px 14px;background:var(--green-soft);border-radius:0 8px 8px 0}
+.grid{display:grid;grid-template-columns:3fr 2fr;gap:20px;align-items:start}
+.canvas{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:12px;display:grid;gap:8px;min-width:0}
+.canvas svg{width:100%;height:auto;display:block}
+.panel{display:grid;gap:14px;min-width:0}
+.panel .box{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:14px 16px;display:grid;gap:10px}
+.kv{display:flex;justify-content:space-between;gap:12px;align-items:baseline;border-bottom:1px solid var(--line2);padding:6px 0}
+.kv:last-child{border-bottom:0}
+.kv .k{color:var(--muted);font-size:14px}
+.kv .v{font-family:var(--mono);font-variant-numeric:tabular-nums;font-size:20px}
+.pill{display:inline-block;border-radius:999px;padding:2px 10px;font-size:13px;border:1px solid var(--line)}
+.pill.disc{color:var(--indigo);border-color:var(--indigo)}
+.pill.prem{color:var(--amber);border-color:var(--amber)}
+.pill.par{color:var(--green);border-color:var(--green)}
+.btn{background:var(--card);border:1px solid var(--line);border-radius:8px;padding:8px 14px;cursor:pointer}
+.btn.primary{background:var(--green);border-color:var(--green);color:#fff}
+.btn:disabled{opacity:.5;cursor:default}
+
+.quiz{display:grid;gap:14px}
+.q{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:16px 18px;display:grid;gap:10px}
+.q .qt{font-weight:600}
+.q .opts{display:grid;gap:8px}
+.q .opts button{text-align:left;background:var(--bg);border:1px solid var(--line);border-radius:8px;padding:10px 12px;cursor:pointer;line-height:1.45}
+.q .opts button.ok{border-color:var(--green);background:var(--green-soft)}
+.q .opts button.bad{border-color:var(--down)}
+.q .opts button:disabled{cursor:default}
+.q .why{display:none;border-top:1px solid var(--line2);padding-top:10px;color:var(--fg)}
+.q.answered .why{display:block}
+.q .why b{color:var(--green)}
+.q .why b.bad{color:var(--down)}
+
+.bet{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:18px;display:grid;gap:12px}
+.bet .row{display:flex;gap:14px;align-items:center;flex-wrap:wrap}
+.bet .guess{font-family:var(--mono);font-size:26px;min-width:5ch}
+.bet .result{display:none;border-top:1px solid var(--line2);padding-top:12px}
+.bet.done .result{display:block}
+.finish{display:flex;gap:12px;align-items:center;flex-wrap:wrap}
+
+.dtable{width:100%;border-collapse:collapse;font-size:14px}
+.dtable th{font-size:11px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);font-weight:500;text-align:right;padding:6px 8px;border-bottom:1px solid var(--line)}
+.dtable th:first-child,.dtable td:first-child{text-align:left}
+.dtable td{padding:7px 8px;text-align:right;border-bottom:1px solid var(--line2);font-family:var(--mono);font-variant-numeric:tabular-nums;white-space:nowrap}
+.dtable td:first-child{font-family:var(--font);white-space:normal}
+.sw{display:inline-block;width:10px;height:10px;border-radius:2px;margin-right:8px;vertical-align:-1px}
+
+.note{font-size:13px;color:var(--muted)}
+@media (max-width:900px){.grid{grid-template-columns:1fr}.wallet{margin-left:0}}
+@media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
+</style>
+
+<header class="top">
+  <div class="brand">债券游戏 <span class="en">Bond Game</span> <em class="tag">预览 Preview</em></div>
+  <nav class="tabs" id="tabs">
+    <button data-view="home" class="on">首页 · 六件套</button>
+    <button data-view="l2">第 2 关 · 价格</button>
+    <button data-view="l9">第 9 关 · 久期</button>
+  </nav>
+  <div class="wallet">直觉账户 Intuition Account <b id="wallet">$0</b></div>
+</header>
+
+<main>
+<!-- ================= HOME ================= -->
+<section class="view" id="view-home">
+  <div class="hero">
+    <h1>看懂这一屏，然后自己下单。</h1>
+    <p>终局目标 Final Goal：IBKR 里 2036 年 2 月到期的六个品种。你现在只认识"票息 Coupon"和"到期 Maturity"，所以整屏都是模糊的。每过一关，点亮一块；第 12 关全亮之后，考试。</p>
+    <div class="sim">
+      <label for="sim">模拟进度 Simulate Progress：已通关到第 <b id="simN">1</b> 关（拖一下，看点亮机制）</label>
+      <input type="range" id="sim" min="0" max="12" value="1">
+    </div>
+  </div>
+
+  <div class="ibkr">
+    <div class="bar">
+      <b>Bond</b><span>United States Treasury</span>
+      <span class="c" data-lvl="6"><span class="v">Type: <b>All</b></span></span>
+      <span class="c lit"><span class="v">Maturity Date: <b>Feb 2036</b></span></span>
+      <span class="c" data-lvl="6"><span class="v">Include Non-Tradable: <b>On</b></span></span>
+    </div>
+    <div class="head"><span>Select Instrument</span><span>6 Result(s)</span></div>
+    <div class="wrap">
+    <table class="tbl">
+      <thead><tr>
+        <th>品种 Instrument</th><th>价格 Price</th><th>收益率 Yield</th><th>买价 / 卖价 Bid / Ask</th>
+        <th class="ghost">久期 Duration <span class="hint">IBKR 不显示，你脑子里要有</span></th>
+      </tr></thead>
+      <tbody>
+        <tr>
+          <td class="c name" data-lvl="10"><span class="v">US-T GOVT STRIPS Principals Feb15'36 912803CX9<span class="sub">本金条 Principal STRIPS · 零息 Zero-coupon</span></span></td>
+          <td class="c num" data-lvl="10"><span class="v">≈61.5</span></td>
+          <td class="c num" data-lvl="10"><span class="v">5.25%</span></td>
+          <td class="c num" data-lvl="10"><span class="v">61.4 / 61.6</span></td>
+          <td class="c num ghost" data-lvl="9"><span class="v">9.1</span></td>
+        </tr>
+        <tr>
+          <td class="c name" data-lvl="10"><span class="v">US-T GOVT STRIPS Interests Feb15'36 9128335B2<span class="sub">利息条 Interest STRIPS · 零息 Zero-coupon</span></span></td>
+          <td class="c num" data-lvl="10"><span class="v">≈61.5</span></td>
+          <td class="c num" data-lvl="10"><span class="v">5.25%</span></td>
+          <td class="c num" data-lvl="10"><span class="v">61.4 / 61.6</span></td>
+          <td class="c num ghost" data-lvl="9"><span class="v">9.1</span></td>
+        </tr>
+        <tr>
+          <td class="c name" data-lvl="11"><span class="v">US-T GOVT TIPS STRIPS Interests Feb15'36 912834HG6<span class="sub">通胀保值利息条 TIPS Interest STRIPS · 实际收益率 Real Yield</span></span></td>
+          <td class="c num" data-lvl="11"><span class="v">≈73.6</span></td>
+          <td class="c num" data-lvl="11"><span class="v">3.3% 实际 real</span></td>
+          <td class="c num" data-lvl="11"><span class="v">—</span></td>
+          <td class="c num ghost" data-lvl="9"><span class="v">9.1</span></td>
+        </tr>
+        <tr>
+          <td class="c name" data-lvl="10"><span class="v">US-T GOVT Note STRIPS Principals Feb15'36 912821TV7<span class="sub">从 Note 拆出的本金条 · 零息 Zero-coupon</span></span></td>
+          <td class="c num" data-lvl="10"><span class="v">≈61.5</span></td>
+          <td class="c num" data-lvl="10"><span class="v">5.25%</span></td>
+          <td class="c num" data-lvl="10"><span class="v">61.4 / 61.6</span></td>
+          <td class="c num ghost" data-lvl="9"><span class="v">9.1</span></td>
+        </tr>
+        <tr>
+          <td class="name"><span class="c" data-lvl="1"><span class="v">US-T GOVT 4.5 Feb15'36 912810FT0 AA1</span></span>
+            <span class="c" data-lvl="1"><span class="v sub">2006 年发的 30 年期 Bond · Face 1,000 · Semi-Annual · Coupon 4.5</span></span></td>
+          <td class="c num" data-lvl="2"><span class="v">95.48</span></td>
+          <td class="c num" data-lvl="3"><span class="v">5.11%</span></td>
+          <td class="c num" data-lvl="5"><span class="v">95.414 / 95.547<span class="sub">× $2,000K</span></span></td>
+          <td class="c num ghost" data-lvl="9"><span class="v">7.5</span></td>
+        </tr>
+        <tr>
+          <td class="c name" data-lvl="7"><span class="v">US-T GOVT Notes 4.125 Feb15'36 91282CPZ8 AA1<span class="sub">2026 年 2 月发的 10 年期 Note · 同一天到期、票息更低</span></span></td>
+          <td class="c num" data-lvl="7"><span class="v">91.77</span></td>
+          <td class="c num" data-lvl="7"><span class="v">5.24%</span></td>
+          <td class="c num" data-lvl="7"><span class="v">91.84 / 91.85<span class="sub">× $6,000K / $16,000K</span></span></td>
+          <td class="c num ghost" data-lvl="9"><span class="v">7.6</span></td>
+        </tr>
+      </tbody>
+    </table>
+    </div>
+    <div class="exam">
+      <span class="legend"><i></i>模糊 = 还没点亮 Not yet lit · 数字来自 2026-09-29 IBKR 屏幕；带 ≈ 的是按当天收益率算的</span>
+      <span class="c" data-lvl="4"><span class="v"><button class="btn" disabled style="color:#fff;background:#1F5FBF;border-color:#1F5FBF">Buy</button> <button class="btn" disabled style="color:#fff;background:#C4453C;border-color:#C4453C">Sell</button> <span class="small muted">第 4 关：知道实付多少钱才点亮</span></span></span>
+      <span class="c" data-lvl="12"><span class="v"><button class="btn primary" disabled>读屏总考 Final Screen Test（预览未含）</button></span></span>
+    </div>
+  </div>
+
+  <div class="map" id="map"></div>
+</section>
+
+<!-- ================= LEVEL 2 ================= -->
+<section class="view" id="view-l2" hidden>
+  <header class="lvl-head">
+    <div class="eyebrow">第一季 · 一只债 &nbsp;Season 1 · One Bond</div>
+    <h2>第 2 关 · 价格为什么不是 100 <span class="en">Why the Price Isn't 100</span></h2>
+    <ol class="timeline"><li><b>讲解</b> Read · 2'</li><li><b>演示</b> Play · 3'</li><li><b>答题</b> Quiz · 3'</li><li><b>小赌局</b> Side Bet · 2'</li><li>共约 10 分钟</li></ol>
+  </header>
+
+  <div class="lesson">
+    <p>你已经知道：一张面值 Face Value 100、票息 Coupon 4.5% 的国债，每半年给你 2.25，到期 Maturity 还你 100。这些条款写死在借条上，一辈子不变。</p>
+    <p>你还不知道的是：这张借条从发行到到期的 30 年里，每一天都在市场上转手，转手价几乎从来不是 100。今天（2026-09-29）IBKR 上这只 4.5 Feb'36 的价格是 <span class="num">95.48</span>。</p>
+    <p>拿定期存单打比方。你去年在银行存了一张三年期、年息 4.5% 的存单。今年银行给新客户的三年期利率涨到了 5.1%。这时你想把手里的存单转让给别人，他为什么要接？银行明明给他 5.1%。他只会在一种情况下接：你打折。折到他按这个折扣价买入、拿到期，实际年化也有 5.1% 为止。这个折扣价，就是 95.48。</p>
+    <p>再换个比方。一套房子签了十年固定租金的租约，市场租金涨了，这套房连同租约就没那么值钱了；市场租金跌了，这份锁定高租金的租约反而成了宝贝。租金就是票息，房价就是债券价格。</p>
+    <p>反过来的例子 IBKR 上也有：2000 年发的一只 6.25% 的老国债（6.25 May'30），今天卖 104.17，高于面值。因为现在市场利率只有 5% 左右，手里有 6.25% 票息的借条是香饽饽，别人愿意加价买。这叫溢价 Premium；95.48 那种叫折价 Discount。</p>
+    <p class="key">价格 Price 和到期收益率 Yield to Maturity (YTM) 是同一件事的两种说法：YTM 是"按今天的价格买入、持有到期、把票息和到期补回面值都算上"的年化回报。利率涨，价格跌；利率跌，价格涨。下面拖一拖。</p>
+    <p>一个反直觉的地方：债券价格下跌，对还没买的人是好事（更便宜的入场价、更高的收益率）；对已经持有、马上要卖的人是坏事；对打算持有到期的人无所谓，他拿到的每一笔现金流一分不少。第 3 关和第 8 关会分别展开这两头。</p>
+  </div>
+
+  <div class="grid">
+    <div class="canvas">
+      <svg id="seesaw" viewBox="0 0 640 150" role="img" aria-label="价格与收益率的跷跷板"></svg>
+      <svg id="curve" viewBox="0 0 640 380" role="img" aria-label="价格随收益率变化的曲线"></svg>
+    </div>
+    <div class="panel">
+      <div class="box">
+        <label for="ySlider">市场收益率 Market Yield（拖动）</label>
+        <input type="range" id="ySlider" min="100" max="900" step="1" value="511">
+        <div class="kv"><span class="k">到期收益率 YTM</span><span class="v" id="yOut">5.11%</span></div>
+        <div class="kv"><span class="k">价格 Price（每 100 面值）</span><span class="v" id="pOut">95.48</span></div>
+        <div class="kv"><span class="k">状态 Status</span><span id="stOut"><span class="pill disc">折价 Discount</span></span></div>
+        <p class="small muted" id="stWhy">收益率 5.11% 高于票息 4.5%，所以价格低于 100。</p>
+        <div><button class="btn" id="resetY">回到今天 Back to Today（95.48 ↔ 5.11%）</button></div>
+      </div>
+      <div class="box">
+        <h3>持有到期，你的钱从哪来 <span class="en">Where the Return Comes From</span></h3>
+        <div class="kv"><span class="k">每年票息 Coupon</span><span class="v">4.50</span></div>
+        <div class="kv"><span class="k">到期补回面值 Pull to Par</span><span class="v" id="pullOut">+4.52</span></div>
+        <div class="kv"><span class="k">当前收益率 Current Yield（票息 ÷ 价格）</span><span class="v" id="cyOut">4.71%</span></div>
+        <div class="kv"><span class="k">到期收益率 YTM（两者合起来）</span><span class="v" id="yOut2">5.11%</span></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="quiz" id="quiz2"></div>
+
+  <div class="bet" id="bet2">
+    <h3>小赌局 <span class="en">Side Bet</span></h3>
+    <p>今天这只债 95.48，收益率 5.11%。假设明天收益率降到 <b>4.11%</b>（降 100 个基点 basis points），别的都不变。价格会涨到多少？拖滑块押一个数。第 8 关会教你怎么估，现在先凭直觉。</p>
+    <div class="row">
+      <input type="range" id="guess" min="95" max="120" step="0.5" value="100" style="flex:1;min-width:200px">
+      <span class="guess num" id="guessOut">100.0</span>
+      <button class="btn primary" id="placeBet">下注 Place Bet</button>
+    </div>
+    <div class="result" id="betResult"></div>
+  </div>
+
+  <div class="finish">
+    <button class="btn primary" id="finish2">通关 → 回首页点亮"95.48" <span style="opacity:.8">Clear Level 2</span></button>
+    <span class="note">硬解锁：三道题全对才能通关（预览里不强制）</span>
+  </div>
+</section>
+
+<!-- ================= LEVEL 9 ================= -->
+<section class="view" id="view-l9" hidden>
+  <header class="lvl-head">
+    <div class="eyebrow">第二季 · 一堆债 &nbsp;Season 2 · Many Bonds</div>
+    <h2>第 9 关 · 久期（下）：四只债一起动 <span class="en">Duration II · Four Bonds, One Rate Move</span></h2>
+    <ol class="timeline"><li><b>讲解</b> Read · 2'</li><li><b>演示</b> Play · 4'</li><li><b>答题</b> Quiz · 3'</li><li>共约 10 分钟</li></ol>
+  </header>
+
+  <div class="lesson">
+    <p>上一关你学了久期 Duration 的定义：利率每变 1%，价格大约变百分之几。这一关把四只真实的债放在一起，对同一个利率变动，看它们的反应差多少。</p>
+    <p>还是用租约打比方。签一年租约和签二十年固定租金租约，市场租金一变，两份合同的价值差别天差地别：一年的那份，明年就能按新价重签，几乎不受影响；二十年的那份，每一年的差价都要算进去。久期就是"你的钱被这个固定利率锁住的平均年数"，锁得越久，利率一动你越有感觉。</p>
+    <p class="key">规律只有两条：剩余年限 Years to Maturity 越长，越敏感；票息 Coupon 越低（零息 Zero-coupon 最低），越敏感。零息债的钱全部锁到最后一天，所以久期等于剩余年限，是同期限里最敏感的。</p>
+    <p>还有一个细节：曲线是弯的（凸性 Convexity）。利率降 1% 涨的，比利率升 1% 跌的多。这是债券对持有人的一点小偏心，久期越长，偏心越明显。</p>
+  </div>
+
+  <div class="grid">
+    <div class="canvas">
+      <svg id="multi" viewBox="0 0 640 420" role="img" aria-label="四只债的价格变化随利率变动的曲线"></svg>
+      <p class="note">横轴：所有收益率同时变动多少（基点 bp）。纵轴：价格变化 %。在图上拖动也可以。</p>
+    </div>
+    <div class="panel">
+      <div class="box">
+        <label for="dSlider">收益率整体变动 Parallel Shift：<b class="num" id="dOut">0 bp</b></label>
+        <input type="range" id="dSlider" min="-300" max="300" step="25" value="0">
+        <div class="wrap"><table class="dtable" id="dtable"></table></div>
+        <p class="note">修正久期 Modified Duration = 利率变 1% 时价格变百分之几（我算的）。四只债的今价来自 2026-09-29 IBKR 屏幕。</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="quiz" id="quiz9"></div>
+</section>
+</main>
+
+<script>
+/* ---------- bond math: semiannual, actual/actual, settle 2026-09-30 (T+1 from 2026-09-29) ---------- */
+const SETTLE = Date.UTC(2026, 8, 30);
+const M = (y, m, d) => Date.UTC(y, m - 1, d);
+function addMonths(t, m) { const d = new Date(t); d.setUTCMonth(d.getUTCMonth() + m); return d.getTime(); }
+function schedule(maturity) { const dates = []; let d = maturity; while (d > SETTLE) { dates.unshift(d); d = addMonths(d, -6); } return { prev: d, next: dates[0], n: dates.length }; }
+function dirtyPrice(y, c, m) { const { prev, next, n } = schedule(m); const w = (next - SETTLE) / (next - prev); let pv = 0; for (let k = 0; k < n; k++) { const cf = c / 2 + (k === n - 1 ? 100 : 0); pv += cf / Math.pow(1 + y / 2, k + w); } return pv; }
+function accrued(c, m) { const { prev, next } = schedule(m); return c / 2 * (SETTLE - prev) / (next - prev); }
+function cleanPrice(y, c, m) { return dirtyPrice(y, c, m) - accrued(c, m); }
+function ytm(p, c, m) { let lo = -0.05, hi = 0.6; for (let i = 0; i < 100; i++) { const mid = (lo + hi) / 2; if (cleanPrice(mid, c, m) > p) lo = mid; else hi = mid; } return (lo + hi) / 2; }
+function modDuration(y, c, m) { const h = 1e-5; return (dirtyPrice(y - h, c, m) - dirtyPrice(y + h, c, m)) / (2 * h) / dirtyPrice(y, c, m); }
+function yearsLeft(m) { return (m - SETTLE) / (365.25 * 864e5); }
+const fmt2 = v => v.toFixed(2), pct = v => (v * 100).toFixed(2) + '%';
+const cssVar = n => getComputedStyle(document.documentElement).getPropertyValue(n).trim();
+
+/* ---------- state ---------- */
+const state = { progress: 1, wallet: 0 };
+try { const s = JSON.parse(localStorage.getItem('bondgame-preview') || '{}'); if (typeof s.wallet === 'number') state.wallet = s.wallet; if (typeof s.progress === 'number') state.progress = s.progress; } catch (e) {}
+function save() { try { localStorage.setItem('bondgame-preview', JSON.stringify(state)); } catch (e) {} }
+function renderWallet() { document.getElementById('wallet').textContent = (state.wallet >= 0 ? '$' : '-$') + Math.abs(state.wallet).toLocaleString(); }
+
+/* ---------- views ---------- */
+const views = ['home', 'l2', 'l9'];
+function show(v) {
+  views.forEach(x => { document.getElementById('view-' + x).hidden = x !== v; });
+  document.querySelectorAll('#tabs button').forEach(b => b.classList.toggle('on', b.dataset.view === v));
+  window.scrollTo({ top: 0 });
+}
+document.getElementById('tabs').addEventListener('click', e => { const b = e.target.closest('button'); if (b) show(b.dataset.view); });
+
+/* ---------- home: lighting + level map ---------- */
+const LEVELS = [
+  { s: 1, n: 1, t: '债券的名字怎么读', en: 'Reading a Bond\'s Name' },
+  { s: 1, n: 2, t: '价格为什么不是 100', en: 'Why the Price Isn\'t 100', play: 'l2' },
+  { s: 1, n: 3, t: '到期收益率是什么', en: 'What Yield to Maturity Means' },
+  { s: 1, n: 4, t: '实付多少钱：净价、全价、应计利息', en: 'Clean vs Dirty Price, Accrued Interest' },
+  { s: 1, n: 5, t: 'Bid / Ask：点差就是成本', en: 'Bid / Ask and the Cost of the Spread' },
+  { s: 2, n: 6, t: 'Bill / Note / Bond 与收益率曲线', en: 'Bills, Notes, Bonds and the Yield Curve' },
+  { s: 2, n: 7, t: '同一天到期的三只债', en: 'Three Bonds, One Maturity' },
+  { s: 2, n: 8, t: '久期（上）：利率变 1% 我亏多少', en: 'Duration I' },
+  { s: 2, n: 9, t: '久期（下）与凸性', en: 'Duration II and Convexity', play: 'l9' },
+  { s: 2, n: 10, t: 'STRIPS：本金条与利息条', en: 'STRIPS: Principal and Interest' },
+  { s: 2, n: 11, t: 'TIPS：实际收益率与通胀', en: 'TIPS: Real Yield and Inflation' },
+  { s: 3, n: 12, t: '读屏总考', en: 'Final Screen Test' },
+  { s: 3, n: 13, t: '怎么选：持有到期、阶梯、税与汇率', en: 'Choosing: Hold, Ladder, Tax and FX' },
+  { s: 3, n: 14, t: '沙盒：几条利率路径都不翻车', en: 'Sandbox: Survive Every Rate Path' },
+];
+const SEASONS = { 1: ['第一季 · 一只债', 'Season 1 · One Bond'], 2: ['第二季 · 一堆债', 'Season 2 · Many Bonds'], 3: ['第三季 · 上手', 'Season 3 · Hands On'] };
+function renderMap() {
+  const map = document.getElementById('map'); map.innerHTML = '';
+  [1, 2, 3].forEach(s => {
+    const sec = document.createElement('div'); sec.className = 'season';
+    sec.innerHTML = `<h3>${SEASONS[s][0]} <span class="en">${SEASONS[s][1]}</span></h3><div class="cards"></div>`;
+    const cards = sec.querySelector('.cards');
+    LEVELS.filter(l => l.s === s).forEach(l => {
+      const st = l.n <= state.progress ? 'done' : (l.n === state.progress + 1 ? 'cur' : 'lock');
+      const c = document.createElement('div'); c.className = 'card ' + st;
+      c.innerHTML = `<div class="n"><span>第 ${l.n} 关 · 10 min</span></div><div class="t">${l.t}<span class="en">${l.en}</span></div>` + (l.play ? `<button data-view="${l.play}">预览可玩 Play</button>` : '');
+      cards.appendChild(c);
+    });
+    map.appendChild(sec);
+  });
+  map.querySelectorAll('button[data-view]').forEach(b => b.addEventListener('click', () => show(b.dataset.view)));
+}
+function applyProgress(animate) {
+  document.querySelectorAll('.c[data-lvl]').forEach(el => {
+    const lit = +el.dataset.lvl <= state.progress; const was = el.classList.contains('lit');
+    el.classList.toggle('lit', lit); el.classList.toggle('just', animate && lit && !was);
+  });
+  document.getElementById('simN').textContent = state.progress;
+  document.getElementById('sim').value = state.progress;
+  renderMap();
+}
+document.getElementById('sim').addEventListener('input', e => { state.progress = +e.target.value; save(); applyProgress(true); });
+
+/* ---------- level 2: one bond ---------- */
+const L2 = { c: 4.5, m: M(2036, 2, 15), p0: 95.48047 };
+L2.y0 = ytm(L2.p0, L2.c, L2.m);
+const CW = 640, CH = 380, ml = 58, mr = 24, mt = 22, mb = 44;
+const sx = v => ml + (v - 1) / 8 * (CW - ml - mr);           // yield 1..9 %
+const sy = v => mt + (140 - v) / 80 * (CH - mt - mb);        // price 60..140
+let curvePath = '';
+(function () { const pts = []; for (let yy = 1; yy <= 9.0001; yy += 0.1) pts.push(`${sx(yy).toFixed(1)},${sy(cleanPrice(yy / 100, L2.c, L2.m)).toFixed(1)}`); curvePath = 'M' + pts.join('L'); })();
+
+function drawCurve(y, extra) {
+  const P = cleanPrice(y, L2.c, L2.m); const fg = cssVar('--fg'), mu = cssVar('--muted'), ln = cssVar('--line'), gr = cssVar('--green'), ind = cssVar('--indigo');
+  let s = '';
+  for (let p = 60; p <= 140; p += 20) s += `<line x1="${ml}" x2="${CW - mr}" y1="${sy(p)}" y2="${sy(p)}" stroke="${ln}" stroke-width="1"/><text x="${ml - 8}" y="${sy(p) + 4}" text-anchor="end" font-size="11" fill="${mu}" font-family="var(--mono)">${p}</text>`;
+  for (let yy = 1; yy <= 9; yy++) s += `<text x="${sx(yy)}" y="${CH - mb + 18}" text-anchor="middle" font-size="11" fill="${mu}" font-family="var(--mono)">${yy}%</text>`;
+  s += `<text x="${ml}" y="${CH - 6}" font-size="11" fill="${mu}">到期收益率 Yield to Maturity →</text>`;
+  s += `<text x="${ml - 46}" y="${mt - 6}" font-size="11" fill="${mu}">价格 Price</text>`;
+  s += `<line x1="${ml}" x2="${CW - mr}" y1="${sy(100)}" y2="${sy(100)}" stroke="${fg}" stroke-dasharray="4 4" stroke-width="1" opacity=".5"/><text x="${CW - mr}" y="${sy(100) - 6}" text-anchor="end" font-size="11" fill="${mu}">面值 Par = 100</text>`;
+  s += `<path d="${curvePath}" fill="none" stroke="${ind}" stroke-width="2"/>`;
+  // today marker
+  s += `<circle cx="${sx(L2.y0 * 100)}" cy="${sy(L2.p0)}" r="7" fill="none" stroke="${mu}" stroke-width="1.5"/><text x="${sx(L2.y0 * 100) + 12}" y="${sy(L2.p0) + 18}" font-size="11" fill="${mu}">IBKR 今天 Today 95.48</text>`;
+  if (extra) s += extra;
+  // current point
+  s += `<line x1="${sx(y * 100)}" x2="${sx(y * 100)}" y1="${sy(P)}" y2="${CH - mb}" stroke="${gr}" stroke-dasharray="3 3"/><line x1="${ml}" x2="${sx(y * 100)}" y1="${sy(P)}" y2="${sy(P)}" stroke="${gr}" stroke-dasharray="3 3"/>`;
+  s += `<circle cx="${sx(y * 100)}" cy="${sy(P)}" r="6" fill="${gr}" stroke="${cssVar('--card')}" stroke-width="2"/>`;
+  const lx = sx(y * 100) + (y > 0.07 ? -12 : 12), anchor = y > 0.07 ? 'end' : 'start';
+  s += `<text x="${lx}" y="${sy(P) - 10}" text-anchor="${anchor}" font-size="13" font-weight="600" fill="${fg}" font-family="var(--mono)">${fmt2(P)} @ ${(y * 100).toFixed(2)}%</text>`;
+  document.getElementById('curve').innerHTML = s;
+}
+function drawSeesaw(y) {
+  const P = cleanPrice(y, L2.c, L2.m); const d = (y - L2.y0) * 100; const k = Math.max(-2.5, Math.min(2.5, d)) * 14;
+  const fg = cssVar('--fg'), mu = cssVar('--muted'), gr = cssVar('--green'), ind = cssVar('--indigo'), card = cssVar('--card');
+  const lx = 90, rx = 550, cy = 88, ly = cy + k, ry = cy - k;
+  let s = `<line x1="${lx}" y1="${ly}" x2="${rx}" y2="${ry}" stroke="${fg}" stroke-width="4" stroke-linecap="round"/>`;
+  s += `<polygon points="320,${cy + 2} 300,130 340,130" fill="${mu}"/><line x1="60" x2="580" y1="132" y2="132" stroke="${mu}" stroke-width="1"/>`;
+  s += `<g transform="translate(${lx},${ly})"><rect x="-58" y="-46" width="116" height="40" rx="8" fill="${card}" stroke="${ind}" stroke-width="1.5"/><text x="0" y="-30" text-anchor="middle" font-size="11" fill="${mu}">价格 Price</text><text x="0" y="-12" text-anchor="middle" font-size="16" font-weight="600" fill="${fg}" font-family="var(--mono)">${fmt2(P)}</text></g>`;
+  s += `<g transform="translate(${rx},${ry})"><rect x="-58" y="-46" width="116" height="40" rx="8" fill="${card}" stroke="${gr}" stroke-width="1.5"/><text x="0" y="-30" text-anchor="middle" font-size="11" fill="${mu}">收益率 Yield</text><text x="0" y="-12" text-anchor="middle" font-size="16" font-weight="600" fill="${fg}" font-family="var(--mono)">${(y * 100).toFixed(2)}%</text></g>`;
+  s += `<text x="320" y="148" text-anchor="middle" font-size="11" fill="${mu}">${d > 0.05 ? '利率比今天高 → 价格比今天低' : d < -0.05 ? '利率比今天低 → 价格比今天高' : '今天 Today：95.48 ↔ 5.11%'}</text>`;
+  document.getElementById('seesaw').innerHTML = s;
+}
+function updateL2() {
+  const y = +document.getElementById('ySlider').value / 10000; const P = cleanPrice(y, L2.c, L2.m);
+  drawSeesaw(y); drawCurve(y);
+  document.getElementById('yOut').textContent = (y * 100).toFixed(2) + '%';
+  document.getElementById('yOut2').textContent = (y * 100).toFixed(2) + '%';
+  document.getElementById('pOut').textContent = fmt2(P);
+  const st = P < 99.9 ? 'disc' : P > 100.1 ? 'prem' : 'par';
+  document.getElementById('stOut').innerHTML = st === 'disc' ? '<span class="pill disc">折价 Discount</span>' : st === 'prem' ? '<span class="pill prem">溢价 Premium</span>' : '<span class="pill par">平价 Par</span>';
+  document.getElementById('stWhy').textContent = st === 'disc' ? `收益率 ${(y * 100).toFixed(2)}% 高于票息 4.5%，所以价格低于 100。` : st === 'prem' ? `收益率 ${(y * 100).toFixed(2)}% 低于票息 4.5%，所以价格高于 100。` : '收益率等于票息，价格就是 100。';
+  document.getElementById('pullOut').textContent = (100 - P >= 0 ? '+' : '') + fmt2(100 - P);
+  document.getElementById('cyOut').textContent = (L2.c / P * 100).toFixed(2) + '%';
+}
+document.getElementById('ySlider').addEventListener('input', updateL2);
+document.getElementById('resetY').addEventListener('click', () => { document.getElementById('ySlider').value = Math.round(L2.y0 * 10000); updateL2(); });
+
+/* ---------- quiz engine ---------- */
+function renderQuiz(id, qs) {
+  const root = document.getElementById(id); root.innerHTML = '';
+  qs.forEach((q, i) => {
+    const el = document.createElement('div'); el.className = 'q';
+    el.innerHTML = `<div class="qt">${i + 1}. ${q.q}</div><div class="opts">${q.opts.map((o, j) => `<button data-j="${j}">${o}</button>`).join('')}</div><div class="why"></div>`;
+    el.querySelector('.opts').addEventListener('click', e => {
+      const b = e.target.closest('button'); if (!b || el.classList.contains('answered')) return;
+      const j = +b.dataset.j; el.classList.add('answered');
+      el.querySelectorAll('button').forEach((x, k) => { x.disabled = true; if (k === q.a) x.classList.add('ok'); else if (k === j) x.classList.add('bad'); });
+      el.querySelector('.why').innerHTML = (j === q.a ? '<b>答对了 Correct.</b> ' : `<b class="bad">不对 Not quite.</b> 你选的"${q.opts[j]}"错在：${q.wrong && q.wrong[j] ? q.wrong[j] : '见下面的解释。'} `) + q.why;
+    });
+    root.appendChild(el);
+  });
+}
+renderQuiz('quiz2', [
+  { q: '票息 Coupon 4.5% 的债，今天以 95.48 买入并持有到期，年化回报大约是？', opts: ['4.5%，票息就是回报', '4.7%，4.5 ÷ 95.48', '5.1%', '9.5%，4.5 加上折价的 5 点'], a: 2,
+    wrong: { 0: '票息是按面值 100 算的，你付的不是 100。', 1: '这是当前收益率 Current Yield，漏了到期补回面值那一块。', 3: '折价 4.52 点要摊到 9.4 年里，不是一年吃完。' },
+    why: '4.7% 是当前收益率 Current Yield，只算了票息。到期还会补回 100 − 95.48 = 4.52 点，摊到 9.4 年里，合起来才是 5.1% 的到期收益率 YTM。' },
+  { q: '明天市场利率上升，这只债的价格 Price 会？', opts: ['上涨', '下跌', '不变，票息是固定的', '取决于美联储怎么说'], a: 1,
+    wrong: { 0: '方向反了。', 2: '票息固定，正因为如此价格才必须动。', 3: '美联储影响的是利率，利率一动价格就动，中间没有别的开关。' },
+    why: '票息不动，但新发的债利息更高了，手里的老债要降价才有人接。价格 Price 和收益率 Yield 永远反向。' },
+  { q: '2000 年发的 6.25% 老债（6.25 May\'30）现在卖 104.17，高于面值。这说明？', opts: ['它比别的国债更安全', '市场收益率低于 6.25%，多出来的票息被提前收了钱', '它快到期了所以贵', 'IBKR 报价错了'], a: 1,
+    wrong: { 0: '都是美国国债，信用完全一样。', 2: '快到期的债价格会向 100 靠拢，不会因此变贵。', 3: '报价没错，溢价 Premium 是正常状态。' },
+    why: '溢价 Premium 的意思是票息高于市场收益率。到期只还 100，多付的 4.17 点，是你为将来每年多拿的票息预先付的账。它的到期收益率约 5.0%，和别的国债差不多。' },
+]);
+
+/* ---------- level 2 side bet ---------- */
+document.getElementById('guess').addEventListener('input', e => { document.getElementById('guessOut').textContent = (+e.target.value).toFixed(1); });
+document.getElementById('placeBet').addEventListener('click', () => {
+  const g = +document.getElementById('guess').value; const ans = cleanPrice(L2.y0 - 0.01, L2.c, L2.m); const err = Math.abs(g - ans);
+  const win = err <= 1 ? 500 : err <= 3 ? 200 : 0; state.wallet += win; save(); renderWallet();
+  const bet = document.getElementById('bet2'); bet.classList.add('done');
+  document.getElementById('betResult').innerHTML = `<p>答案 Answer：<b class="num">${fmt2(ans)}</b>，涨了 ${fmt2(ans - L2.p0)} 点（${((ans / L2.p0 - 1) * 100).toFixed(1)}%）。你押 ${g.toFixed(1)}，偏差 ${err.toFixed(1)} 点。${win ? `<b class="up">直觉账户 +$${win}</b>` : '<b class="dn">这次没赚到，直觉账户 +$0</b>'}</p><p class="note">第 8 关的公式：修正久期 Modified Duration ≈ 7.5，利率降 1% → 价格涨约 7.5%。上面曲线上已经标出这个点。</p>`;
+  document.getElementById('placeBet').disabled = true;
+  document.getElementById('ySlider').value = Math.round((L2.y0 - 0.01) * 10000); updateL2();
+});
+document.getElementById('finish2').addEventListener('click', () => { if (state.progress < 2) { state.progress = 2; save(); } show('home'); applyProgress(true); });
+
+/* ---------- level 9: four bonds ---------- */
+const L9 = [
+  { name: 'Bill Sep02\'27', zh: '国库券 Bill · 零息', c: 0, m: M(2027, 9, 2), p: 96.00883, col: '--s1' },
+  { name: 'Bond 6.25 May15\'30', zh: '2000 年发的老债 · 溢价', c: 6.25, m: M(2030, 5, 15), p: 104.17, col: '--s2' },
+  { name: 'Bond 4.5 Feb15\'36', zh: '主线债 · 折价', c: 4.5, m: M(2036, 2, 15), p: 95.48047, col: '--s3' },
+  { name: 'STRIPS Principal Aug15\'48', zh: '本金条 · 零息 · 21.9 年', c: 0, m: M(2048, 8, 15), p: 29.097, col: '--s4' },
+];
+L9.forEach(b => { b.y0 = ytm(b.p, b.c, b.m); b.dur = modDuration(b.y0, b.c, b.m); b.yrs = yearsLeft(b.m); });
+const W9 = 640, H9 = 420, l9 = 58, r9 = 150, t9 = 20, b9 = 46;
+const x9 = d => l9 + (d + 3) / 6 * (W9 - l9 - r9);       // shift -3..+3 %
+const y9 = v => t9 + (100 - v) / 160 * (H9 - t9 - b9);    // pct -60..100
+const pctAt = (b, d) => (cleanPrice(b.y0 + d / 100, b.c, b.m) / b.p - 1) * 100;
+const paths9 = L9.map(b => { const pts = []; for (let d = -3; d <= 3.0001; d += 0.1) pts.push(`${x9(d).toFixed(1)},${y9(pctAt(b, d)).toFixed(1)}`); return 'M' + pts.join('L'); });
+function drawMulti(dbp) {
+  const d = dbp / 100; const fg = cssVar('--fg'), mu = cssVar('--muted'), ln = cssVar('--line'), card = cssVar('--card');
+  let s = '';
+  for (let v = -60; v <= 100; v += 20) s += `<line x1="${l9}" x2="${W9 - r9}" y1="${y9(v)}" y2="${y9(v)}" stroke="${v === 0 ? fg : ln}" stroke-width="1" opacity="${v === 0 ? .5 : 1}"/><text x="${l9 - 8}" y="${y9(v) + 4}" text-anchor="end" font-size="11" fill="${mu}" font-family="var(--mono)">${v > 0 ? '+' : ''}${v}%</text>`;
+  for (let dd = -3; dd <= 3; dd++) s += `<text x="${x9(dd)}" y="${H9 - b9 + 18}" text-anchor="middle" font-size="11" fill="${mu}" font-family="var(--mono)">${dd > 0 ? '+' : ''}${dd * 100}</text>`;
+  s += `<text x="${l9}" y="${H9 - 6}" font-size="11" fill="${mu}">收益率变动 Yield Change（bp）→</text><text x="${l9 - 46}" y="${t9 - 6}" font-size="11" fill="${mu}">价格变化 Price Change</text>`;
+  L9.forEach((b, i) => { s += `<path d="${paths9[i]}" fill="none" stroke="${cssVar(b.col)}" stroke-width="2"/>`; });
+  // direct labels at right end
+  const ends = L9.map((b, i) => ({ i, y: y9(pctAt(b, 3)) })).sort((a, b2) => a.y - b2.y);
+  for (let k = 1; k < ends.length; k++) if (ends[k].y - ends[k - 1].y < 14) ends[k].y = ends[k - 1].y + 14;
+  ends.forEach(e => { s += `<text x="${W9 - r9 + 8}" y="${e.y + 4}" font-size="11" fill="${fg}">${L9[e.i].name}</text>`; });
+  // crosshair
+  s += `<line x1="${x9(d)}" x2="${x9(d)}" y1="${t9}" y2="${H9 - b9}" stroke="${mu}" stroke-dasharray="3 3"/>`;
+  L9.forEach(b => { const v = pctAt(b, d); s += `<circle cx="${x9(d)}" cy="${y9(v)}" r="6" fill="${cssVar(b.col)}" stroke="${card}" stroke-width="2"/>`; });
+  document.getElementById('multi').innerHTML = s;
+  document.getElementById('dOut').textContent = (dbp > 0 ? '+' : '') + dbp + ' bp';
+  let t = '<thead><tr><th>债 Bond</th><th>剩余 Yrs</th><th>今价 Now</th><th>新价 New</th><th>变化 Chg</th><th>久期 Dur</th></tr></thead><tbody>';
+  L9.forEach(b => { const np = cleanPrice(b.y0 + d / 100, b.c, b.m), ch = (np / b.p - 1) * 100; t += `<tr><td><span class="sw" style="background:${cssVar(b.col)}"></span>${b.name}<span class="sub small muted" style="display:block">${b.zh}</span></td><td>${b.yrs.toFixed(1)}</td><td>${fmt2(b.p)}</td><td>${fmt2(np)}</td><td class="${ch > 0.005 ? 'up' : ch < -0.005 ? 'dn' : ''}">${ch > 0 ? '+' : ''}${ch.toFixed(1)}%</td><td>${b.dur.toFixed(1)}</td></tr>`; });
+  document.getElementById('dtable').innerHTML = t + '</tbody>';
+}
+document.getElementById('dSlider').addEventListener('input', e => drawMulti(+e.target.value));
+(function () { const svg = document.getElementById('multi'); let down = false;
+  const pick = ev => { const r = svg.getBoundingClientRect(); const px = (ev.clientX - r.left) / r.width * W9; let d = Math.round(((px - l9) / (W9 - l9 - r9) * 6 - 3) * 4) / 4; d = Math.max(-3, Math.min(3, d)); document.getElementById('dSlider').value = d * 100; drawMulti(d * 100); };
+  svg.addEventListener('pointerdown', ev => { down = true; pick(ev); }); svg.addEventListener('pointermove', ev => { if (down) pick(ev); });
+  window.addEventListener('pointerup', () => { down = false; }); svg.style.touchAction = 'pan-y'; })();
+renderQuiz('quiz9', [
+  { q: '你判断未来一年利率会降 1%。四只里哪只赚最多？', opts: ['Bill Sep\'27', 'Bond 6.25 May\'30', 'Bond 4.5 Feb\'36', 'STRIPS Principal Aug\'48'], a: 3,
+    wrong: { 0: '一年内到期的债，利率怎么变它都快拿回 100 了，几乎不动。', 1: '3.6 年、高票息，久期只有 3 出头。', 2: '9.4 年、久期 7.5，是第二敏感的，但零息的 21.9 年长条更敏感。' },
+    why: '久期 21 的 STRIPS 涨约 24%。但同一件事的另一面：如果你判断错了、利率升 1%，它也是跌最多的那只（约 −19%）。押方向之前，先看久期决定押多大。' },
+  { q: '利率升 1% 和降 1%，同一只债的涨跌幅为什么不对称？', opts: ['市场偏好上涨', '凸性 Convexity：价格–收益率曲线是弯的', 'IBKR 的算法问题', '票息不对称'], a: 1,
+    wrong: { 0: '和市场情绪无关，是数学。', 2: '任何计算器算出来都一样。', 3: '票息是固定的，不存在不对称。' },
+    why: '价格随收益率变化的曲线向下凸，所以利率降时涨得多、利率升时跌得少。久期越长，这个不对称越明显。' },
+]);
+
+/* ---------- boot ---------- */
+renderWallet(); applyProgress(false); updateL2(); drawMulti(0);
+matchMedia('(prefers-color-scheme: dark)').addEventListener('change', () => { updateL2(); drawMulti(+document.getElementById('dSlider').value); });
+</script>

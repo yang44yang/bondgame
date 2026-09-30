@@ -1,0 +1,1409 @@
+{
+  "snapshot": "2026-09-29",
+  "settle": "2026-09-30",
+  "screenshotDir": "IBKR截图/",
+  "sourceKinds": {
+    "ibkr": "IBKR 屏幕上显示的数，screenshot 字段写明是哪张截图",
+    "computed": "src/math 按街头惯例算的（半年付息、实际/实际、T+1；Bill 用 BEY），由 scripts/build-snapshot.ts 写入",
+    "inferred": "截图里没有，按 IBKR 网页版命名规则推的（CLAUDE.md 五.8）",
+    "claude-md": "CLAUDE.md 里写的事实，截图里看不到"
+  },
+  "instruments": [
+    {
+      "code": "BILL27",
+      "role": "曲线短端、零息；第 9 关四线之一",
+      "treasuryType": "Bill",
+      "pricing": "bill",
+      "cusip": "912797WA1",
+      "coupon": 0,
+      "maturity": "2027-09-02",
+      "headline": {
+        "quote": 0,
+        "field": "last"
+      },
+      "names": [
+        {
+          "use": "scanner",
+          "text": "US-T Govt Bill Sep02'27",
+          "source": "ibkr",
+          "screenshot": "ScreenShot_2026-09-29_094456_610.png"
+        },
+        {
+          "use": "chart",
+          "text": "US-T GOVT Sep02'27 912797WA1 · United States Treasury · 1 · SMART",
+          "source": "ibkr",
+          "screenshot": "bill info.png"
+        }
+      ],
+      "records": [
+        {
+          "source": "ibkr",
+          "type": "quote",
+          "screenshot": "bill info.png",
+          "screen": "web · 详情页头部",
+          "last": 96.00883,
+          "change": 0.00347,
+          "changePct": 0,
+          "bid": 95.98666,
+          "ask": 96.031,
+          "bidYield": null,
+          "askYield": null,
+          "bidSizeK": 25000,
+          "askSizeK": 25000,
+          "note": "Bill 详情页头部的 Ask / Bid 不带收益率；走势图 O/H/L/C 是 4.49600（收益率）"
+        },
+        {
+          "source": "ibkr",
+          "type": "quote",
+          "screenshot": "ScreenShot_2026-09-29_094456_610.png",
+          "screen": "web · Bond Scanner · Treasury Type: Bill",
+          "closing": 95.93,
+          "bid": 95.9279,
+          "ask": 95.9747,
+          "bidYield": 4.55,
+          "askYield": 4.496,
+          "bidSizeK": 25000,
+          "askSizeK": 25000,
+          "note": "价格和收益率成对出现在同一屏，是 bill.ts 的校准用例；CLOSING YIELD 显示 —"
+        },
+        {
+          "source": "computed",
+          "type": "model",
+          "method": "bill.ts：Treasury 债券等价收益率 BEY（实际/365）",
+          "input": {
+            "price": 96.00883,
+            "field": "last"
+          },
+          "ytm": 4.4569,
+          "cleanPrice": 96.00883,
+          "accrued": 0,
+          "dirtyPrice": 96.00883,
+          "modDuration": 0.9046,
+          "macaulay": null
+        }
+      ]
+    },
+    {
+      "code": "BOND30",
+      "role": "溢价老券，点差近 1 点",
+      "treasuryType": "Bond",
+      "pricing": "coupon",
+      "cusip": "912810FM5",
+      "coupon": 6.25,
+      "maturity": "2030-05-15",
+      "headline": {
+        "quote": 0,
+        "field": "closing"
+      },
+      "names": [
+        {
+          "use": "scanner",
+          "text": "US-T Govt Bond 6.25 May15'30",
+          "source": "ibkr",
+          "screenshot": "ScreenShot_2026-09-29_095125_954.png"
+        }
+      ],
+      "records": [
+        {
+          "source": "ibkr",
+          "type": "quote",
+          "screenshot": "ScreenShot_2026-09-29_095125_954.png",
+          "screen": "web · Bond Scanner · 2028/01/01 To 2036/01/01 · Treasury Type: Bond",
+          "closing": 104.17,
+          "bid": 103.5156,
+          "ask": null,
+          "bidYield": 5.172,
+          "askYield": 4.892,
+          "bidSizeK": 1000,
+          "askSizeK": null,
+          "truncated": {
+            "ask": "104.4…",
+            "askSizeK": "x $1,0…"
+          }
+        },
+        {
+          "source": "ibkr",
+          "type": "fields",
+          "screenshot": "ScreenShot_2026-09-29_095237_402.png",
+          "screen": "web · 详情页 Bond 区块",
+          "fields": {
+            "Issuer Country": "US",
+            "Bond Issuer Type": "Govt",
+            "Issue Date": "Feb 15, 2000",
+            "Announce Date": "Dec 31, 4712",
+            "Last Trading Date": "May 15, 2030",
+            "Issue Amount": "17.0B",
+            "Amount Outstanding": "17.0B",
+            "Initial Price": "98.77",
+            "Face Value": "1,000.00",
+            "Issuer Rating": "CANADIAN · JCR · MIKUNI · MOODY AA1 · RI · TRACE I",
+            "IBCID": "15960463",
+            "ISIN": "US912810FM54",
+            "Bond Type": "Bond",
+            "Currency": "USD",
+            "Defaulted": "-",
+            "Exchange Listed": "Y",
+            "Min Order Amount": "1",
+            "Min Incremental Amount": "1",
+            "Coupon Type": "FIXED"
+          }
+        },
+        {
+          "source": "computed",
+          "type": "model",
+          "method": "bond.ts：半年复利、实际/实际、T+1",
+          "input": {
+            "price": 104.17,
+            "field": "closing"
+          },
+          "ytm": 4.9764,
+          "cleanPrice": 104.17,
+          "accrued": 2.34375,
+          "dirtyPrice": 106.51375,
+          "modDuration": 3.1574,
+          "macaulay": 3.236,
+          "askFromYield": {
+            "askYield": 4.892,
+            "ask": 104.4542
+          }
+        }
+      ]
+    },
+    {
+      "code": "BOND36",
+      "role": "主线债，贯穿第一季",
+      "treasuryType": "Bond",
+      "pricing": "coupon",
+      "cusip": "912810FT0",
+      "coupon": 4.5,
+      "maturity": "2036-02-15",
+      "headline": {
+        "quote": 0,
+        "field": "last"
+      },
+      "names": [
+        {
+          "use": "scanner",
+          "text": "US-T Govt Bond 4.5 Feb15'36",
+          "source": "inferred",
+          "note": "网页版列表短名没截到，按 US-T Govt Bond 6.25 May15'30 的格式推"
+        },
+        {
+          "use": "chart",
+          "text": "US-T GOVT 4.5 Feb15'36 912810FT0 AA1 · United States Treasury · 1 · SMART",
+          "source": "inferred",
+          "note": "按 Note / TIPS 详情页走势图标题的格式推"
+        },
+        {
+          "use": "app",
+          "text": "US-T GOVT 4.5 Feb15'36 912810FT0 AA1",
+          "source": "ibkr",
+          "screenshot": "app/app-筛选-Feb2036-六件套.png"
+        }
+      ],
+      "records": [
+        {
+          "source": "ibkr",
+          "type": "quote",
+          "screenshot": "app/app-BOND36-详情-上半屏.png",
+          "screen": "app · 详情页",
+          "last": 95.48047,
+          "change": -0.05078,
+          "changePct": -0.05,
+          "bid": 95.41406,
+          "ask": 95.54688,
+          "bidYield": 5.121,
+          "askYield": 5.103,
+          "bidSizeK": 2000,
+          "askSizeK": 2000,
+          "note": "这只债的网页版页面没截到，数字来自 App；App 走势图同样画收益率（4.15 → 5.10）"
+        },
+        {
+          "source": "ibkr",
+          "type": "fields",
+          "screenshot": "app/app-BOND36-详情-上半屏.png",
+          "screen": "app · 详情页",
+          "fields": {
+            "Coupon": "4.5",
+            "Payment Frequency": "Semi-Annual",
+            "Initial Margin": "5.00 %",
+            "Maintenance Margin": "5.00 %"
+          }
+        },
+        {
+          "source": "ibkr",
+          "type": "fields",
+          "screenshot": "app/app-BOND36-详情-下半屏.png",
+          "screen": "app · 详情页",
+          "fields": {
+            "Face Value": "1000.0",
+            "Currency": "USD",
+            "Bond Issuer Type": "GOVT",
+            "Underlying": "US-T",
+            "Rating Agency": "MOODY",
+            "Ratings": "AA1",
+            "Callable": "No",
+            "Puttable": "No",
+            "Exchange Listed": "Yes",
+            "CUSIP/IBCID": "912810FT0",
+            "Security Type": "Bond",
+            "Description": "T 4 1/2 02/15/36",
+            "Amount Outstanding": "26,397M",
+            "Country of Issue": "US",
+            "CONID": "37926925",
+            "ISIN": "US912810FT08"
+          }
+        },
+        {
+          "source": "claude-md",
+          "type": "fact",
+          "text": "2006 年发行的 30 年期 Bond"
+        },
+        {
+          "source": "computed",
+          "type": "model",
+          "method": "bond.ts：半年复利、实际/实际、T+1",
+          "input": {
+            "price": 95.48047,
+            "field": "last"
+          },
+          "ytm": 5.1121,
+          "cleanPrice": 95.48047,
+          "accrued": 0.5625,
+          "dirtyPrice": 96.04297,
+          "modDuration": 7.4705,
+          "macaulay": 7.6614
+        }
+      ]
+    },
+    {
+      "code": "NOTE36F",
+      "role": "同到期、票息更低的 Note；六件套之一",
+      "treasuryType": "Note",
+      "pricing": "coupon",
+      "cusip": "91282CPZ8",
+      "coupon": 4.125,
+      "maturity": "2036-02-15",
+      "headline": {
+        "quote": 0,
+        "field": "closing"
+      },
+      "names": [
+        {
+          "use": "scanner",
+          "text": "US-T Govt Note 4.125 Feb15'36",
+          "source": "ibkr",
+          "screenshot": "note scanner.png"
+        },
+        {
+          "use": "app",
+          "text": "US-T GOVT Notes 4.125 Feb15'36 91282CPZ8 AA1",
+          "source": "ibkr",
+          "screenshot": "app/app-筛选-Feb2036-六件套.png"
+        }
+      ],
+      "records": [
+        {
+          "source": "ibkr",
+          "type": "quote",
+          "screenshot": "note scanner.png",
+          "screen": "web · Bond Scanner · Treasury Type: Note",
+          "closing": 91.77,
+          "bid": 91.84,
+          "ask": null,
+          "bidYield": 5.238,
+          "askYield": 5.237,
+          "bidSizeK": 6000,
+          "askSizeK": null,
+          "truncated": {
+            "ask": "91.8…",
+            "askSizeK": "x $16,0…"
+          },
+          "note": "5.238% 是 bid 91.84 的收益率，不是 closing 91.77 的"
+        },
+        {
+          "source": "claude-md",
+          "type": "fact",
+          "text": "2026 年 2 月发行的 10 年期 Note"
+        },
+        {
+          "source": "computed",
+          "type": "model",
+          "method": "bond.ts：半年复利、实际/实际、T+1",
+          "input": {
+            "price": 91.77,
+            "field": "closing"
+          },
+          "ytm": 5.247,
+          "cleanPrice": 91.77,
+          "accrued": 0.515625,
+          "dirtyPrice": 92.28563,
+          "modDuration": 7.5486,
+          "macaulay": 7.7466,
+          "askFromYield": {
+            "askYield": 5.237,
+            "ask": 91.8395
+          }
+        }
+      ]
+    },
+    {
+      "code": "NOTE36A",
+      "role": "新发 10 年期，流动性最好（点差 0.01）",
+      "treasuryType": "Note",
+      "pricing": "coupon",
+      "cusip": "91282CRF0",
+      "coupon": 4.625,
+      "maturity": "2036-08-15",
+      "headline": {
+        "quote": 0,
+        "field": "last"
+      },
+      "names": [
+        {
+          "use": "scanner",
+          "text": "US-T Govt Note 4.625 Aug15'36",
+          "source": "ibkr",
+          "screenshot": "note scanner.png"
+        },
+        {
+          "use": "header",
+          "text": "US-T Govt Note 4.625 Aug15'36",
+          "source": "ibkr",
+          "screenshot": "ScreenShot_2026-09-29_094643_710.png"
+        },
+        {
+          "use": "chart",
+          "text": "US-T GOVT Notes 4.625 Aug15'36 91282CRF0 AA1 · United States Treasury · 1 · SMART",
+          "source": "ibkr",
+          "screenshot": "ScreenShot_2026-09-29_094643_710.png"
+        }
+      ],
+      "records": [
+        {
+          "source": "ibkr",
+          "type": "quote",
+          "screenshot": "ScreenShot_2026-09-29_094643_710.png",
+          "screen": "web · 详情页头部",
+          "last": 95.295,
+          "change": 0.045,
+          "changePct": 0.05,
+          "bid": 95.29,
+          "ask": 95.3,
+          "bidYield": 5.241,
+          "askYield": 5.24,
+          "bidSizeK": 40000,
+          "askSizeK": 15000
+        },
+        {
+          "source": "ibkr",
+          "type": "quote",
+          "screenshot": "note scanner.png",
+          "screen": "web · Bond Scanner · Treasury Type: Note",
+          "closing": 95.2,
+          "bid": 95.29,
+          "ask": null,
+          "bidYield": 5.241,
+          "askYield": 5.241,
+          "bidSizeK": 15000,
+          "askSizeK": null,
+          "truncated": {
+            "ask": "95.2…",
+            "askSizeK": "x $15,0…"
+          },
+          "note": "与详情页不是同一时刻：这里 bid size 是 $15,000K，详情页是 $40,000K"
+        },
+        {
+          "source": "ibkr",
+          "type": "fields",
+          "screenshot": "ScreenShot_2026-09-29_094651_873.png",
+          "screen": "web · 详情页 Bond 区块",
+          "fields": {
+            "Issuer Country": "US",
+            "Bond Issuer Type": "Govt",
+            "Issue Date": "Aug 17, 2026",
+            "Announce Date": "Dec 31, 2012",
+            "Last Trading Date": "Aug 15, 2036",
+            "Issue Amount": "91.6B",
+            "Amount Outstanding": "91.6B",
+            "Initial Price": "98.36",
+            "Face Value": "1,000.00",
+            "Issuer Rating": "MOODY AA1 · TRACE I",
+            "IBCID": "910810698",
+            "ISIN": "US91282CRF04",
+            "Bond Type": "Note",
+            "Currency": "USD",
+            "Defaulted": "-",
+            "Exchange Listed": "Y",
+            "Min Order Amount": "1",
+            "Min Incremental Amount": "1",
+            "Puttable": "No",
+            "Callable": "No",
+            "IsSoftCall": "No",
+            "US Only": "No",
+            "Coupon Type": "FIXED",
+            "Date From": "Aug 15, 2026",
+            "Date To": "Aug 15, 2036",
+            "Rate": "4.6",
+            "Payable with similar bonds": "No",
+            "First coupon date": "Feb 15, 2027"
+          }
+        },
+        {
+          "source": "computed",
+          "type": "model",
+          "method": "bond.ts：半年复利、实际/实际、T+1",
+          "input": {
+            "price": 95.295,
+            "field": "last"
+          },
+          "ytm": 5.2407,
+          "cleanPrice": 95.295,
+          "accrued": 0.578125,
+          "dirtyPrice": 95.87313,
+          "modDuration": 7.7347,
+          "macaulay": 7.9374
+        }
+      ]
+    },
+    {
+      "code": "NOTE36M",
+      "role": "第 7 关对照",
+      "treasuryType": "Note",
+      "pricing": "coupon",
+      "cusip": null,
+      "coupon": 4.375,
+      "maturity": "2036-05-15",
+      "headline": {
+        "quote": 0,
+        "field": "closing"
+      },
+      "names": [
+        {
+          "use": "scanner",
+          "text": "US-T Govt Note 4.375 May15'36",
+          "source": "ibkr",
+          "screenshot": "note scanner.png"
+        }
+      ],
+      "records": [
+        {
+          "source": "ibkr",
+          "type": "quote",
+          "screenshot": "note scanner.png",
+          "screen": "web · Bond Scanner · Treasury Type: Note",
+          "closing": 93.42,
+          "bid": 93.52,
+          "ask": null,
+          "bidYield": 5.241,
+          "askYield": 5.24,
+          "bidSizeK": 16000,
+          "askSizeK": null,
+          "truncated": {
+            "ask": "93.5…",
+            "askSizeK": "x $16,0…"
+          }
+        },
+        {
+          "source": "computed",
+          "type": "model",
+          "method": "bond.ts：半年复利、实际/实际、T+1",
+          "input": {
+            "price": 93.42,
+            "field": "closing"
+          },
+          "ytm": 5.254,
+          "cleanPrice": 93.42,
+          "accrued": 1.640625,
+          "dirtyPrice": 95.06062,
+          "modDuration": 7.5546,
+          "macaulay": 7.7531,
+          "askFromYield": {
+            "askYield": 5.24,
+            "ask": 93.5209
+          }
+        }
+      ]
+    },
+    {
+      "code": "SP36",
+      "role": "六件套：本金条",
+      "treasuryType": "Bond STRIPS Principal",
+      "pricing": "zero",
+      "cusip": "912803CX9",
+      "coupon": 0,
+      "maturity": "2036-02-15",
+      "headline": null,
+      "names": [
+        {
+          "use": "scanner",
+          "text": "US-T Govt Bond STRIPS Principal 0.0 Feb15'36",
+          "source": "inferred",
+          "note": "按 US-T Govt Bond STRIPS Principal 0.0 Aug15'48 的格式推"
+        },
+        {
+          "use": "app",
+          "text": "US-T GOVT STRIPS Principals Feb15'36 912803CX9",
+          "source": "ibkr",
+          "screenshot": "app/app-筛选-Feb2036-六件套.png"
+        }
+      ],
+      "records": [
+        {
+          "source": "computed",
+          "type": "model",
+          "method": "bond.ts 零息定价，收益率取邻近 Note STRIPS 的屏幕报价",
+          "input": {
+            "yield": 5.25,
+            "assumption": "SIX_PACK_STRIPS_YIELD"
+          },
+          "ytm": 5.25,
+          "cleanPrice": 61.51812,
+          "accrued": 0,
+          "dirtyPrice": 61.51812,
+          "modDuration": 9.1352,
+          "macaulay": 9.375,
+          "synthetic": {
+            "assumption": "STRIPS_TYPICAL_SPREAD",
+            "spread": 0.15,
+            "bid": 61.4431,
+            "ask": 61.5931,
+            "bidYield": 5.2634,
+            "askYield": 5.2367
+          }
+        }
+      ]
+    },
+    {
+      "code": "SI36",
+      "role": "六件套：利息条",
+      "treasuryType": "Bond STRIPS Interest",
+      "pricing": "zero",
+      "cusip": "9128335B2",
+      "coupon": 0,
+      "maturity": "2036-02-15",
+      "headline": null,
+      "names": [
+        {
+          "use": "scanner",
+          "text": "US-T Govt Bond STRIPS Interest 0.0 Feb15'36",
+          "source": "inferred",
+          "note": "按 US-T Govt Bond STRIPS Interest 0.0 May15'46 的格式推"
+        },
+        {
+          "use": "app",
+          "text": "US-T GOVT STRIPS Interests Feb15'36 9128335B2",
+          "source": "ibkr",
+          "screenshot": "app/app-筛选-Feb2036-六件套.png"
+        }
+      ],
+      "records": [
+        {
+          "source": "computed",
+          "type": "model",
+          "method": "bond.ts 零息定价，收益率取邻近 Note STRIPS 的屏幕报价",
+          "input": {
+            "yield": 5.25,
+            "assumption": "SIX_PACK_STRIPS_YIELD"
+          },
+          "ytm": 5.25,
+          "cleanPrice": 61.51812,
+          "accrued": 0,
+          "dirtyPrice": 61.51812,
+          "modDuration": 9.1352,
+          "macaulay": 9.375,
+          "synthetic": {
+            "assumption": "STRIPS_TYPICAL_SPREAD",
+            "spread": 0.15,
+            "bid": 61.4431,
+            "ask": 61.5931,
+            "bidYield": 5.2634,
+            "askYield": 5.2367
+          }
+        }
+      ]
+    },
+    {
+      "code": "NSP36",
+      "role": "六件套：从 Note 拆出的本金条",
+      "treasuryType": "Note STRIPS Principal",
+      "pricing": "zero",
+      "cusip": "912821TV7",
+      "coupon": 0,
+      "maturity": "2036-02-15",
+      "headline": null,
+      "names": [
+        {
+          "use": "scanner",
+          "text": "US-T Govt Note STRIPS Principal 0.0 Feb15'36",
+          "source": "inferred",
+          "note": "按 US-T Govt Note STRIPS Principal 0.0 May15'36 的格式推"
+        },
+        {
+          "use": "app",
+          "text": "US-T GOVT Note STRIPS Principals Feb15'36 912821TV7",
+          "source": "ibkr",
+          "screenshot": "app/app-筛选-Feb2036-六件套.png"
+        }
+      ],
+      "records": [
+        {
+          "source": "computed",
+          "type": "model",
+          "method": "bond.ts 零息定价，收益率取邻近 Note STRIPS 的屏幕报价",
+          "input": {
+            "yield": 5.25,
+            "assumption": "SIX_PACK_STRIPS_YIELD"
+          },
+          "ytm": 5.25,
+          "cleanPrice": 61.51812,
+          "accrued": 0,
+          "dirtyPrice": 61.51812,
+          "modDuration": 9.1352,
+          "macaulay": 9.375,
+          "synthetic": {
+            "assumption": "STRIPS_TYPICAL_SPREAD",
+            "spread": 0.15,
+            "bid": 61.4431,
+            "ask": 61.5931,
+            "bidYield": 5.2634,
+            "askYield": 5.2367
+          }
+        }
+      ]
+    },
+    {
+      "code": "TSI36",
+      "role": "六件套：TIPS 利息条",
+      "treasuryType": "TIPS STRIPS Interest",
+      "pricing": "zero",
+      "realYield": true,
+      "cusip": "912834HG6",
+      "coupon": 0,
+      "maturity": "2036-02-15",
+      "headline": null,
+      "names": [
+        {
+          "use": "scanner",
+          "text": "US-T Govt TIPS STRIPS Interest 0.0 Feb15'36",
+          "source": "inferred",
+          "note": "网页版名字是猜的，没有任何 TIPS STRIPS 的网页版截图"
+        },
+        {
+          "use": "app",
+          "text": "US-T GOVT TIPS STRIPS Interests Feb15'36 912834HG6",
+          "source": "ibkr",
+          "screenshot": "app/app-筛选-Feb2036-六件套.png"
+        }
+      ],
+      "records": [
+        {
+          "source": "computed",
+          "type": "model",
+          "method": "bond.ts 零息定价，实际收益率取假设值；价格未含 index ratio",
+          "input": {
+            "yield": 3.3,
+            "assumption": "SIX_PACK_TIPS_STRIPS_REAL_YIELD"
+          },
+          "ytm": 3.3,
+          "cleanPrice": 73.57607,
+          "accrued": 0,
+          "dirtyPrice": 73.57607,
+          "modDuration": 9.2228,
+          "macaulay": 9.375,
+          "synthetic": {
+            "assumption": "TIPS_TYPICAL_SPREAD",
+            "spread": 0.43,
+            "bid": 73.3611,
+            "ask": 73.7911,
+            "bidYield": 3.3317,
+            "askYield": 3.2684
+          }
+        }
+      ]
+    },
+    {
+      "code": "NSP36M",
+      "role": "校准 SP36 价格",
+      "treasuryType": "Note STRIPS Principal",
+      "pricing": "zero",
+      "cusip": null,
+      "coupon": 0,
+      "maturity": "2036-05-15",
+      "headline": {
+        "quote": 0,
+        "field": "bid"
+      },
+      "names": [
+        {
+          "use": "scanner",
+          "text": "US-T Govt Note STRIPS Principal 0.0 May15'36",
+          "source": "ibkr",
+          "screenshot": "note scanner.png"
+        }
+      ],
+      "records": [
+        {
+          "source": "ibkr",
+          "type": "quote",
+          "screenshot": "note scanner.png",
+          "screen": "web · Bond Scanner · Treasury Type: Note",
+          "closing": null,
+          "bid": 60.661,
+          "ask": null,
+          "bidYield": 5.263,
+          "askYield": 5.244,
+          "bidSizeK": 25000,
+          "askSizeK": null,
+          "truncated": {
+            "ask": "60.7…",
+            "askSizeK": "x $25,0…"
+          },
+          "note": "CLOSING PRICE 被截图里的「已添加到剪贴板」提示挡住；CLAUDE.md 里的 60.66 就是这个 bid"
+        },
+        {
+          "source": "computed",
+          "type": "model",
+          "method": "bond.ts：半年复利、实际/实际、T+1",
+          "input": {
+            "price": 60.661,
+            "field": "bid"
+          },
+          "ytm": 5.2615,
+          "cleanPrice": 60.661,
+          "accrued": 0,
+          "dirtyPrice": 60.661,
+          "modDuration": 9.3783,
+          "macaulay": 9.625,
+          "askFromYield": {
+            "askYield": 5.244,
+            "ask": 60.7604
+          }
+        }
+      ]
+    },
+    {
+      "code": "SP48",
+      "role": "超长零息；第 9 关四线之一",
+      "treasuryType": "Bond STRIPS Principal",
+      "pricing": "zero",
+      "cusip": "912803FE8",
+      "coupon": 0,
+      "maturity": "2048-08-15",
+      "headline": {
+        "quote": 0,
+        "field": "last"
+      },
+      "names": [
+        {
+          "use": "scanner",
+          "text": "US-T Govt Bond STRIPS Principal 0.0 Aug15'48",
+          "source": "ibkr",
+          "screenshot": "ScreenShot_2026-09-29_094811_715.png"
+        },
+        {
+          "use": "chart",
+          "text": "US-T GOVT STRIPS Principals Aug15'48 912803FE8 · United States Treasury · 1 · SMART",
+          "source": "ibkr",
+          "screenshot": "ScreenShot_2026-09-29_094820_891.png"
+        }
+      ],
+      "records": [
+        {
+          "source": "ibkr",
+          "type": "quote",
+          "screenshot": "ScreenShot_2026-09-29_094820_891.png",
+          "screen": "web · 详情页头部",
+          "last": 29.097,
+          "change": -0.00772,
+          "changePct": -0.03,
+          "bid": 29.035,
+          "ask": 29.159,
+          "bidYield": 5.734,
+          "askYield": 5.714,
+          "bidSizeK": 25000,
+          "askSizeK": 25000
+        },
+        {
+          "source": "ibkr",
+          "type": "quote",
+          "screenshot": "ScreenShot_2026-09-29_094811_715.png",
+          "screen": "web · Bond Scanner · Treasury Type: Bond STRIPS Principal",
+          "closing": 29.1,
+          "bid": 29.029,
+          "ask": null,
+          "bidYield": 5.735,
+          "askYield": 5.715,
+          "bidSizeK": 25000,
+          "askSizeK": null,
+          "truncated": {
+            "ask": "29.1…",
+            "askSizeK": "x $25,0…"
+          }
+        },
+        {
+          "source": "ibkr",
+          "type": "fields",
+          "screenshot": "ScreenShot_2026-09-29_094837_921.png",
+          "screen": "web · 详情页 Bond 区块",
+          "fields": {
+            "Issuer Country": "US",
+            "Bond Issuer Type": "Govt",
+            "Issue Date": "Aug 15, 2018",
+            "Announce Date": "Dec 31, 2012",
+            "Last Trading Date": "Aug 15, 2048",
+            "Issue Amount": "14.7B",
+            "Amount Outstanding": "14.7B",
+            "Initial Price": "0.00",
+            "Face Value": "1,000.00",
+            "Issuer Rating": "TRACE I",
+            "IBCID": "329284273",
+            "ISIN": "US912803FE87",
+            "Bond Type": "Bond STRIPS Principal",
+            "Currency": "USD",
+            "Defaulted": "-",
+            "Exchange Listed": "Y",
+            "Min Order Amount": "1",
+            "Min Incremental Amount": "1",
+            "Puttable": "No",
+            "Callable": "No"
+          }
+        },
+        {
+          "source": "computed",
+          "type": "model",
+          "method": "bond.ts：半年复利、实际/实际、T+1",
+          "input": {
+            "price": 29.097,
+            "field": "last"
+          },
+          "ytm": 5.724,
+          "cleanPrice": 29.097,
+          "accrued": 0,
+          "dirtyPrice": 29.097,
+          "modDuration": 21.2664,
+          "macaulay": 21.875
+        }
+      ]
+    },
+    {
+      "code": "SP43",
+      "role": "下单页素材（order.png / order2.png）",
+      "treasuryType": "Bond STRIPS Principal",
+      "pricing": "zero",
+      "cusip": "912803GX5",
+      "coupon": 0,
+      "maturity": "2043-11-15",
+      "headline": {
+        "quote": 0,
+        "field": "last"
+      },
+      "names": [
+        {
+          "use": "header",
+          "text": "US-T Govt Bond STRIPS Principal 0.0 Nov15'43",
+          "source": "ibkr",
+          "screenshot": "order.png"
+        },
+        {
+          "use": "chart",
+          "text": "US-T GOVT STRIPS Principals Nov15'43 912803GX5 · United States Treasury · 1 · SMART",
+          "source": "ibkr",
+          "screenshot": "order.png"
+        }
+      ],
+      "records": [
+        {
+          "source": "ibkr",
+          "type": "quote",
+          "screenshot": "order.png",
+          "screen": "web · 详情页头部 + Order Ticket",
+          "last": 38.3405,
+          "change": 0.13946,
+          "changePct": 0.37,
+          "bid": 38.248,
+          "ask": 38.433,
+          "bidYield": 5.692,
+          "askYield": 5.663,
+          "bidSizeK": 25000,
+          "askSizeK": 25000
+        },
+        {
+          "source": "ibkr",
+          "type": "quote",
+          "screenshot": "order2.png",
+          "screen": "web · 详情页头部 + Order Ticket 第二步",
+          "last": 38.3375,
+          "change": 0.13646,
+          "changePct": 0.36,
+          "bid": 38.245,
+          "ask": 38.43,
+          "bidYield": 5.693,
+          "askYield": 5.664,
+          "bidSizeK": 25000,
+          "askSizeK": 25000
+        },
+        {
+          "source": "ibkr",
+          "type": "fields",
+          "screenshot": "order.png",
+          "screen": "web · 详情页 Bond 区块（只露出一行）",
+          "fields": {
+            "Issuer Country": "US",
+            "IBCID": "667573983"
+          }
+        },
+        {
+          "source": "computed",
+          "type": "model",
+          "method": "bond.ts：半年复利、实际/实际、T+1",
+          "input": {
+            "price": 38.3405,
+            "field": "last"
+          },
+          "ytm": 5.6771,
+          "cleanPrice": 38.3405,
+          "accrued": 0,
+          "dirtyPrice": 38.3405,
+          "modDuration": 16.6523,
+          "macaulay": 17.125
+        }
+      ]
+    },
+    {
+      "code": "SI46",
+      "role": "利息条；Amount Outstanding 显示 0.00（噪音）",
+      "treasuryType": "Bond STRIPS Interest",
+      "pricing": "zero",
+      "cusip": "912834QH4",
+      "coupon": 0,
+      "maturity": "2046-05-15",
+      "headline": {
+        "quote": 0,
+        "field": "last"
+      },
+      "names": [
+        {
+          "use": "header",
+          "text": "US-T Govt Bond STRIPS Interest 0.0 May15'46",
+          "source": "ibkr",
+          "screenshot": "ScreenShot_2026-09-29_094557_961.png"
+        },
+        {
+          "use": "chart",
+          "text": "US-T GOVT STRIPS Interests May15'46 912834QH4 · United States Treasury · 1 · SMART",
+          "source": "ibkr",
+          "screenshot": "ScreenShot_2026-09-29_094557_961.png"
+        }
+      ],
+      "records": [
+        {
+          "source": "ibkr",
+          "type": "quote",
+          "screenshot": "ScreenShot_2026-09-29_094557_961.png",
+          "screen": "web · 详情页头部",
+          "last": 32.3815,
+          "change": -0.09373,
+          "changePct": -0.29,
+          "bid": 32.289,
+          "ask": 32.474,
+          "bidYield": 5.844,
+          "askYield": 5.814,
+          "bidSizeK": 25000,
+          "askSizeK": 25000
+        },
+        {
+          "source": "ibkr",
+          "type": "fields",
+          "screenshot": "ScreenShot_2026-09-29_094604_427.png",
+          "screen": "web · 详情页 Bond 区块",
+          "fields": {
+            "Issuer Country": "US",
+            "Bond Issuer Type": "Govt",
+            "Issue Date": "May 16, 2016",
+            "Announce Date": "Dec 31, 2012",
+            "Last Trading Date": "May 15, 2046",
+            "Issue Amount": "1.00M",
+            "Amount Outstanding": "0.00",
+            "Initial Price": "0.00",
+            "Face Value": "1,000.00",
+            "Issuer Rating": "TRACE I",
+            "IBCID": "233411224",
+            "ISIN": "US912834QH43",
+            "Bond Type": "Bond STRIPS Interest",
+            "Currency": "USD",
+            "Defaulted": "-",
+            "Exchange Listed": "Y",
+            "Min Order Amount": "1",
+            "Min Incremental Amount": "1",
+            "Puttable": "No",
+            "Callable": "No",
+            "IsSoftCall": "No",
+            "US Only": "No"
+          }
+        },
+        {
+          "source": "computed",
+          "type": "model",
+          "method": "bond.ts：半年复利、实际/实际、T+1",
+          "input": {
+            "price": 32.3815,
+            "field": "last"
+          },
+          "ytm": 5.829,
+          "cleanPrice": 32.3815,
+          "accrued": 0,
+          "dirtyPrice": 32.3815,
+          "modDuration": 19.0692,
+          "macaulay": 19.625
+        }
+      ]
+    },
+    {
+      "code": "SI28",
+      "role": "同到期利息条与本金条价格几乎相同",
+      "treasuryType": "Bond STRIPS Interest",
+      "pricing": "zero",
+      "cusip": null,
+      "coupon": 0,
+      "maturity": "2028-11-15",
+      "headline": {
+        "quote": 0,
+        "field": "closing"
+      },
+      "names": [
+        {
+          "use": "scanner",
+          "text": "US-T Govt Bond STRIPS Interest 0.0 Nov15'28",
+          "source": "ibkr",
+          "screenshot": "ScreenShot_2026-09-29_095125_954.png"
+        }
+      ],
+      "records": [
+        {
+          "source": "ibkr",
+          "type": "quote",
+          "screenshot": "ScreenShot_2026-09-29_095125_954.png",
+          "screen": "web · Bond Scanner · 2028/01/01 To 2036/01/01 · Treasury Type: Bond",
+          "closing": 90.18,
+          "bid": 90.031,
+          "ask": null,
+          "bidYield": 5.003,
+          "askYield": 4.904,
+          "bidSizeK": 25000,
+          "askSizeK": null,
+          "truncated": {
+            "ask": "90.2…",
+            "askSizeK": "x $25,0…"
+          }
+        },
+        {
+          "source": "computed",
+          "type": "model",
+          "method": "bond.ts：半年复利、实际/实际、T+1",
+          "input": {
+            "price": 90.18,
+            "field": "closing"
+          },
+          "ytm": 4.9237,
+          "cleanPrice": 90.18,
+          "accrued": 0,
+          "dirtyPrice": 90.18,
+          "modDuration": 2.0739,
+          "macaulay": 2.125,
+          "askFromYield": {
+            "askYield": 4.904,
+            "ask": 90.2169
+          }
+        }
+      ]
+    },
+    {
+      "code": "SP28",
+      "role": "同到期利息条与本金条价格几乎相同",
+      "treasuryType": "Bond STRIPS Principal",
+      "pricing": "zero",
+      "cusip": null,
+      "coupon": 0,
+      "maturity": "2028-11-15",
+      "headline": {
+        "quote": 0,
+        "field": "closing"
+      },
+      "names": [
+        {
+          "use": "scanner",
+          "text": "US-T Govt Bond STRIPS Principal 0.0 Nov15'28",
+          "source": "ibkr",
+          "screenshot": "ScreenShot_2026-09-29_095125_954.png"
+        }
+      ],
+      "records": [
+        {
+          "source": "ibkr",
+          "type": "quote",
+          "screenshot": "ScreenShot_2026-09-29_095125_954.png",
+          "screen": "web · Bond Scanner · 2028/01/01 To 2036/01/01 · Treasury Type: Bond",
+          "closing": 90.27,
+          "bid": 90.109,
+          "ask": null,
+          "bidYield": 4.962,
+          "askYield": 4.872,
+          "bidSizeK": 25000,
+          "askSizeK": null,
+          "truncated": {
+            "ask": "90.2…",
+            "askSizeK": "x $25,0…"
+          }
+        },
+        {
+          "source": "computed",
+          "type": "model",
+          "method": "bond.ts：半年复利、实际/实际、T+1",
+          "input": {
+            "price": 90.27,
+            "field": "closing"
+          },
+          "ytm": 4.8757,
+          "cleanPrice": 90.27,
+          "accrued": 0,
+          "dirtyPrice": 90.27,
+          "modDuration": 2.0744,
+          "macaulay": 2.125,
+          "askFromYield": {
+            "askYield": 4.872,
+            "ask": 90.2769
+          }
+        }
+      ]
+    },
+    {
+      "code": "TIPS56",
+      "role": "TIPS 主例（2026-02 新发 30 年）",
+      "treasuryType": "Bond TIPS",
+      "pricing": "coupon",
+      "realYield": true,
+      "cusip": "912810US5",
+      "coupon": 2.375,
+      "maturity": "2056-02-15",
+      "headline": {
+        "quote": 0,
+        "field": "last"
+      },
+      "names": [
+        {
+          "use": "header",
+          "text": "US-T Govt Bond TIPS 2.375 Feb15'56",
+          "source": "ibkr",
+          "screenshot": "ScreenShot_2026-09-29_095341_660.png"
+        },
+        {
+          "use": "chart",
+          "text": "US-T GOVT TIPS 2.375 Feb15'56 912810US5 AA1 · United States Treasury · 1 · SMART",
+          "source": "ibkr",
+          "screenshot": "ScreenShot_2026-09-29_095341_660.png"
+        }
+      ],
+      "records": [
+        {
+          "source": "ibkr",
+          "type": "quote",
+          "screenshot": "ScreenShot_2026-09-29_095341_660.png",
+          "screen": "web · 详情页头部",
+          "last": 82.80859,
+          "change": 0.23048,
+          "changePct": 0.28,
+          "bid": 82.594,
+          "ask": 83.023,
+          "bidYield": 3.305,
+          "askYield": 3.28,
+          "bidSizeK": 25000,
+          "askSizeK": 25000,
+          "note": "收益率是实际收益率；价格未乘 index ratio"
+        },
+        {
+          "source": "ibkr",
+          "type": "fields",
+          "screenshot": "ScreenShot_2026-09-29_095352_351.png",
+          "screen": "web · 详情页 Bond 区块",
+          "fields": {
+            "Issuer Country": "US",
+            "Bond Issuer Type": "Govt",
+            "Issue Date": "Feb 27, 2026",
+            "Announce Date": "Dec 31, 2012",
+            "Last Trading Date": "Feb 15, 2056",
+            "Issue Amount": "18.0B",
+            "Amount Outstanding": "18.0B",
+            "Initial Price": "88.32",
+            "Face Value": "1,000.00",
+            "Issuer Rating": "MOODY AA1 · TRACE I",
+            "IBCID": "857019433",
+            "ISIN": "US912810US59",
+            "Bond Type": "Bond TIPS",
+            "Currency": "USD",
+            "Defaulted": "-",
+            "Exchange Listed": "Y",
+            "Min Order Amount": "1",
+            "Min Incremental Amount": "1",
+            "Coupon Type": "FIXED",
+            "Date From": "Feb 15, 2026",
+            "Date To": "Feb 15, 2056",
+            "Rate": "2.4",
+            "Payable with similar bonds": "No",
+            "First coupon date": "Aug 15, 2026",
+            "Second coupon date": "—"
+          }
+        },
+        {
+          "source": "computed",
+          "type": "model",
+          "method": "bond.ts：半年复利、实际/实际、T+1",
+          "input": {
+            "price": 82.80859,
+            "field": "last"
+          },
+          "ytm": 3.2925,
+          "cleanPrice": 82.80859,
+          "accrued": 0.296875,
+          "dirtyPrice": 83.10546,
+          "modDuration": 19.9747,
+          "macaulay": 20.3035
+        }
+      ]
+    },
+    {
+      "code": "TIPS50",
+      "role": "低票息 TIPS 为何只值 50",
+      "treasuryType": "Bond TIPS",
+      "pricing": "coupon",
+      "realYield": true,
+      "cusip": null,
+      "coupon": 0.25,
+      "maturity": "2050-02-15",
+      "headline": {
+        "quote": 0,
+        "field": "closing"
+      },
+      "names": [
+        {
+          "use": "scanner",
+          "text": "US-T Govt Bond TIPS 0.25 Feb15'50",
+          "source": "ibkr",
+          "screenshot": "ScreenShot_2026-09-29_095316_819.png"
+        }
+      ],
+      "records": [
+        {
+          "source": "ibkr",
+          "type": "quote",
+          "screenshot": "ScreenShot_2026-09-29_095316_819.png",
+          "screen": "web · Bond Scanner · Treasury Type: Bond TIPS",
+          "closing": 50.25,
+          "bid": 50.1875,
+          "ask": null,
+          "bidYield": 3.335,
+          "askYield": 3.295,
+          "bidSizeK": 25000,
+          "askSizeK": null,
+          "truncated": {
+            "ask": "50.6…",
+            "askSizeK": "x $25,0…"
+          }
+        },
+        {
+          "source": "computed",
+          "type": "model",
+          "method": "bond.ts：半年复利、实际/实际、T+1",
+          "input": {
+            "price": 50.25,
+            "field": "closing"
+          },
+          "ytm": 3.3298,
+          "cleanPrice": 50.25,
+          "accrued": 0.03125,
+          "dirtyPrice": 50.28125,
+          "modDuration": 21.957,
+          "macaulay": 22.3225,
+          "askFromYield": {
+            "askYield": 3.295,
+            "ask": 50.6359
+          }
+        }
+      ]
+    }
+  ],
+  "orderTicket": {
+    "source": "ibkr",
+    "screenshots": [
+      "order.png",
+      "order2.png"
+    ],
+    "code": "SP43",
+    "fields": {
+      "THOUSAND FACE VALUE": "1",
+      "ORDER TYPE": "Limit",
+      "LIMIT PRICE": "38.43000",
+      "TIME-IN-FORCE": "Day",
+      "ALL OR NONE": "No",
+      "ATTACH ORDERS": "Profit Taker (off)",
+      "Buttons": "Buy Order · Preview"
+    },
+    "preview": {
+      "Headline": "Buy 1 US-T for about ~ 390.80 USD",
+      "Order Type": "Limit",
+      "Limit Price": "38.43",
+      "Time-In-Force": "Day",
+      "Amount": "384.30 USD",
+      "Commissions & Fees (est.)": "5.00 ... 8.00 USD",
+      "Net Amount": "384.30 USD",
+      "Commission (est.)": "~ 5.00 ... 8.00 USD",
+      "Accrued Interest (est.)": "~ 0 USD",
+      "Total": "~ 390.80 USD"
+    },
+    "capPriceNotice": "Confirm Mandatory Cap Price: IB may set a cap (buy) or floor (sell) on the limit price; the order may then not trade."
+  },
+  "noise": [
+    {
+      "what": "Announce Date",
+      "screenshot": "ScreenShot_2026-09-29_095237_402.png",
+      "shows": "Dec 31, 4712（BOND30）；其他详情页是 Dec 31, 2012",
+      "source": "ibkr"
+    },
+    {
+      "what": "Amount Outstanding",
+      "screenshot": "ScreenShot_2026-09-29_094604_427.png",
+      "shows": "0.00，而 Issue Amount 是 1.00M（SI46）",
+      "source": "ibkr"
+    },
+    {
+      "what": "Scanner 无名行",
+      "screenshot": "ScreenShot_2026-09-29_095125_954.png",
+      "shows": "PRODUCT 显示 —，价格 103.27、bid 102.6992 × $1,000K、收益率 5.101% / 4.841%",
+      "source": "ibkr"
+    },
+    {
+      "what": "Issuer Rating 里的 TRACE I",
+      "screenshot": "ScreenShot_2026-09-29_094837_921.png",
+      "shows": "TRACE 是债券成交报告系统，I 不是评级",
+      "source": "ibkr"
+    },
+    {
+      "what": "Exchange Listed",
+      "screenshot": "ScreenShot_2026-09-29_094651_873.png",
+      "shows": "Y，对国债没有意义",
+      "source": "ibkr"
+    },
+    {
+      "what": "Coupon Features · Rate",
+      "screenshot": "ScreenShot_2026-09-29_094651_873.png",
+      "shows": "4.625 显示成 4.6；TIPS56 的 2.375 显示成 2.4",
+      "source": "ibkr"
+    },
+    {
+      "what": "Initial Price",
+      "screenshot": "ScreenShot_2026-09-29_094837_921.png",
+      "shows": "0.00（STRIPS）",
+      "source": "ibkr"
+    }
+  ]
+}

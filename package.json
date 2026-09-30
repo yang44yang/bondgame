@@ -1,0 +1,29 @@
+{
+  "name": "bondgame",
+  "private": true,
+  "version": "0.1.0",
+  "type": "module",
+  "description": "美国国债教学游戏 US Treasury teaching game",
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc -b && vite build --base=/bondgame/",
+    "preview": "vite preview --base=/bondgame/",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "typecheck": "tsc -b",
+    "build:data": "node scripts/build-snapshot.ts"
+  },
+  "dependencies": {
+    "react": "18.3.1",
+    "react-dom": "18.3.1"
+  },
+  "devDependencies": {
+    "@types/node": "^24.19.0",
+    "@types/react": "^18.3.31",
+    "@types/react-dom": "^18.3.7",
+    "@vitejs/plugin-react": "^6.1.1",
+    "typescript": "~5.9.3",
+    "vite": "^8.3.1",
+    "vitest": "^5.0.2"
+  }
+}

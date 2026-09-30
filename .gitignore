@@ -1,0 +1,10 @@
+node_modules
+dist
+*.local
+*.tsbuildinfo
+.DS_Store
+.claude/settings.local.json
+
+# IBKR account screenshots stay private: they are the source of src/data/snapshot-2026-09-29.json
+# (every record names its screenshot) but are not published.
+IBKR截图/

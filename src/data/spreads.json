@@ -1,0 +1,140 @@
+{
+  "source": "computed",
+  "from": "snapshot-2026-09-29.json",
+  "unit": "price points per 100 face; yieldBp = bid yield − ask yield",
+  "rows": [
+    {
+      "code": "NOTE36F",
+      "bid": 91.84,
+      "ask": 91.8395,
+      "points": -0.0005,
+      "yieldBp": 0.1,
+      "source": "computed",
+      "screenshot": "note scanner.png",
+      "note": "ask 价格被截图截断，用 IBKR 的 ask 收益率反算；差值小于收益率三位小数的舍入误差（约 ±0.004 点），只能说点差 ≤0.01"
+    },
+    {
+      "code": "NOTE36M",
+      "bid": 93.52,
+      "ask": 93.5209,
+      "points": 0.0009,
+      "yieldBp": 0.1,
+      "source": "computed",
+      "screenshot": "note scanner.png",
+      "note": "ask 价格被截图截断，用 IBKR 的 ask 收益率反算；差值小于收益率三位小数的舍入误差（约 ±0.004 点），只能说点差 ≤0.01"
+    },
+    {
+      "code": "NOTE36A",
+      "bid": 95.29,
+      "ask": 95.3,
+      "points": 0.01,
+      "yieldBp": 0.1,
+      "source": "ibkr",
+      "screenshot": "ScreenShot_2026-09-29_094643_710.png"
+    },
+    {
+      "code": "BILL27",
+      "bid": 95.98666,
+      "ask": 96.031,
+      "points": 0.04434,
+      "yieldBp": null,
+      "source": "ibkr",
+      "screenshot": "bill info.png"
+    },
+    {
+      "code": "NSP36M",
+      "bid": 60.661,
+      "ask": 60.7604,
+      "points": 0.0994,
+      "yieldBp": 1.9,
+      "source": "computed",
+      "screenshot": "note scanner.png",
+      "note": "ask 价格被截图截断，用 IBKR 的 ask 收益率反算"
+    },
+    {
+      "code": "SP48",
+      "bid": 29.035,
+      "ask": 29.159,
+      "points": 0.124,
+      "yieldBp": 2,
+      "source": "ibkr",
+      "screenshot": "ScreenShot_2026-09-29_094820_891.png"
+    },
+    {
+      "code": "BOND36",
+      "bid": 95.41406,
+      "ask": 95.54688,
+      "points": 0.13282,
+      "yieldBp": 1.8,
+      "source": "ibkr",
+      "screenshot": "app/app-BOND36-详情-上半屏.png"
+    },
+    {
+      "code": "SP28",
+      "bid": 90.109,
+      "ask": 90.2769,
+      "points": 0.1679,
+      "yieldBp": 9,
+      "source": "computed",
+      "screenshot": "ScreenShot_2026-09-29_095125_954.png",
+      "note": "ask 价格被截图截断，用 IBKR 的 ask 收益率反算"
+    },
+    {
+      "code": "SP43",
+      "bid": 38.248,
+      "ask": 38.433,
+      "points": 0.185,
+      "yieldBp": 2.9,
+      "source": "ibkr",
+      "screenshot": "order.png"
+    },
+    {
+      "code": "SI46",
+      "bid": 32.289,
+      "ask": 32.474,
+      "points": 0.185,
+      "yieldBp": 3,
+      "source": "ibkr",
+      "screenshot": "ScreenShot_2026-09-29_094557_961.png"
+    },
+    {
+      "code": "SI28",
+      "bid": 90.031,
+      "ask": 90.2169,
+      "points": 0.1859,
+      "yieldBp": 9.9,
+      "source": "computed",
+      "screenshot": "ScreenShot_2026-09-29_095125_954.png",
+      "note": "ask 价格被截图截断，用 IBKR 的 ask 收益率反算"
+    },
+    {
+      "code": "TIPS56",
+      "bid": 82.594,
+      "ask": 83.023,
+      "points": 0.429,
+      "yieldBp": 2.5,
+      "source": "ibkr",
+      "screenshot": "ScreenShot_2026-09-29_095341_660.png"
+    },
+    {
+      "code": "TIPS50",
+      "bid": 50.1875,
+      "ask": 50.6359,
+      "points": 0.4484,
+      "yieldBp": 4,
+      "source": "computed",
+      "screenshot": "ScreenShot_2026-09-29_095316_819.png",
+      "note": "ask 价格被截图截断，用 IBKR 的 ask 收益率反算"
+    },
+    {
+      "code": "BOND30",
+      "bid": 103.5156,
+      "ask": 104.4542,
+      "points": 0.9386,
+      "yieldBp": 28,
+      "source": "computed",
+      "screenshot": "ScreenShot_2026-09-29_095125_954.png",
+      "note": "ask 价格被截图截断，用 IBKR 的 ask 收益率反算"
+    }
+  ]
+}
